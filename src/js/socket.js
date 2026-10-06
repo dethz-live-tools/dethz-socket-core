@@ -19,6 +19,12 @@ var socketConnector = (ip) => {
       spotifyCommandHandler(msg);
     } else if (msg.startsWith("log: ")) {
       logHandler(msg);
+    } else if (msg.startsWith("tt: ")) {
+      if (typeof tiktokHandler === "function") {
+        tiktokHandler(msg);
+      } else {
+        console.log("TikTok handler not loaded:", msg);
+      }
     } else {
       console.log(msg);
     }
@@ -27,6 +33,9 @@ var socketConnector = (ip) => {
   ws.onclose = () => {
     console.log("Disconnected from server");
     socketController(false);
+    if (typeof tiktokController === "function") {
+      tiktokController(false);
+    }
   };
 };
 

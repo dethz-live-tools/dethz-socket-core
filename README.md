@@ -67,6 +67,7 @@ core/
         │   ├── handler.js     # Spotify socket command parser
         │   └── listener.js    # Spotify UI button event listeners
         └── tiktok/
+            ├── controller.js  # TikTok state, counters & listener manager
             └── handler.js     # TikTok socket command parser
 ```
 

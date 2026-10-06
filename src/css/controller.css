@@ -302,14 +302,20 @@
     }
     
     #tiktok-container {
-      form {
+      form#tiktok-connect {
+        display: flex;
+        flex-direction: row;
+        max-width: 28rem;
+
         input {
+          flex: 1;
           background: var(--ctp-crust);
           border: 1px solid var(--ctp-surface-2);
-          padding: .5rem;
-          border-top-left-radius: 1rem;
-          border-bottom-left-radius: 1rem;
+          padding: .5rem .75rem;
+          border-top-left-radius: .5rem;
+          border-bottom-left-radius: .5rem;
           color: var(--ctp-text);
+          font-size: 14px;
 
           &:focus,
           &:hover {
@@ -322,14 +328,95 @@
           border: 0;
           background: var(--ctp-green);
           color: var(--ctp-base);
-
-          padding: .5rem .75rem;
-          border-top-right-radius: 1rem;
-          border-bottom-right-radius: 1rem;
+          font-weight: 600;
+          padding: .5rem 1rem;
+          border-top-right-radius: .5rem;
+          border-bottom-right-radius: .5rem;
+          font-size: 14px;
 
           &:hover {
             cursor: pointer;
-            opacity: .6;
+            opacity: .8;
+          }
+        }
+      }
+
+      #current-connect {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: .75rem;
+        background: var(--ctp-surface-0);
+        padding: .75rem 1rem;
+        border-radius: .75rem;
+        border: 1px solid var(--ctp-surface-1);
+        margin-bottom: 1rem;
+
+        .tt-conn-info {
+          display: flex;
+          align-items: center;
+          gap: .5rem;
+
+          .tt-conn-badge {
+            background: rgba(166, 218, 149, 0.2);
+            color: var(--ctp-green);
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 999px;
+            letter-spacing: .5px;
+          }
+
+          .tt-conn-text {
+            font-size: 14px;
+            color: var(--ctp-text);
+
+            strong {
+              color: var(--ctp-sapphire);
+            }
+          }
+        }
+
+        .tt-stats-bar {
+          display: flex;
+          align-items: center;
+          gap: .75rem;
+          flex-wrap: wrap;
+
+          .tt-stat-item {
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            background: var(--ctp-crust);
+            padding: .25rem .6rem;
+            border-radius: .5rem;
+            font-size: 12px;
+
+            .tt-stat-label {
+              color: var(--ctp-subtext-0);
+            }
+
+            .tt-stat-value {
+              font-weight: bold;
+              color: var(--ctp-text);
+            }
+          }
+        }
+
+        #tt-disconnect {
+          background: var(--ctp-red);
+          color: var(--ctp-base);
+          border: 0;
+          padding: .4rem .85rem;
+          border-radius: .5rem;
+          font-weight: bold;
+          font-size: 13px;
+          cursor: pointer;
+          transition: opacity .2s;
+
+          &:hover {
+            opacity: .8;
           }
         }
       }
@@ -337,13 +424,359 @@
       #tt-dash {
         display: flex;
         flex-direction: row;
+        gap: 1rem;
+        width: 100%;
 
-        #tt-chat-container {
-          width: 50%;
+        #tt-chat-container,
+        #tt-gift-container {
+          flex: 1;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          background: var(--ctp-surface-0);
+          border: 1px solid var(--ctp-surface-1);
+          border-radius: .75rem;
+          overflow: hidden;
         }
 
-        #tt-gift-container {
-          width: 50%;
+        .tt-panel-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: .65rem .85rem;
+          background: var(--ctp-surface-1);
+          border-bottom: 1px solid var(--ctp-surface-2);
+
+          .tt-panel-title {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--ctp-text);
+
+            .tt-badge {
+              background: var(--ctp-crust);
+              color: var(--ctp-subtext-1);
+              font-size: 11px;
+              padding: 2px 7px;
+              border-radius: 999px;
+              font-weight: normal;
+            }
+          }
+
+          .tt-panel-controls {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+
+            .tt-toggle-label {
+              display: inline-flex;
+              align-items: center;
+              gap: .35rem;
+              font-size: 12px;
+              color: var(--ctp-subtext-1);
+              cursor: pointer;
+              user-select: none;
+
+              input[type="checkbox"] {
+                cursor: pointer;
+                accent-color: var(--ctp-sapphire);
+              }
+            }
+
+            .tt-btn-small {
+              background: var(--ctp-surface-2);
+              color: var(--ctp-text);
+              border: 0;
+              padding: .2rem .55rem;
+              border-radius: .35rem;
+              font-size: 11px;
+              cursor: pointer;
+
+              &:hover {
+                background: var(--ctp-overlay-0);
+              }
+            }
+          }
+        }
+
+        .tt-scrollbox {
+          height: 22rem;
+          max-height: 26rem;
+          overflow-y: auto;
+          overflow-x: hidden;
+          padding: .75rem;
+          display: flex;
+          flex-direction: column;
+          gap: .5rem;
+          background: var(--ctp-crust);
+
+          &::-webkit-scrollbar {
+            width: 6px;
+          }
+
+          &::-webkit-scrollbar-track {
+            background: var(--ctp-crust);
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background: var(--ctp-surface-2);
+            border-radius: 3px;
+          }
+
+          &::-webkit-scrollbar-thumb:hover {
+            background: var(--ctp-overlay-0);
+          }
+
+          .tt-empty-state {
+            margin: auto;
+            text-align: center;
+            color: var(--ctp-subtext-0);
+            padding: 2rem 1rem;
+
+            p {
+              margin: 0 0 .25rem 0;
+              font-weight: 500;
+              font-size: 14px;
+            }
+
+            span {
+              font-size: 12px;
+              color: var(--ctp-overlay-1);
+            }
+          }
+        }
+
+        .tt-chat-item {
+          display: flex;
+          flex-direction: row;
+          gap: .65rem;
+          padding: .5rem .65rem;
+          border-radius: .5rem;
+          background: var(--ctp-surface-0);
+          border: 1px solid rgba(255, 255, 255, 0.03);
+          transition: background .15s ease;
+
+          &:hover {
+            background: var(--ctp-surface-1);
+          }
+
+          &.tt-chat-gift {
+            background: rgba(245, 169, 127, 0.08);
+            border-left: 3px solid var(--ctp-peach);
+          }
+
+          .tt-avatar-wrapper {
+            flex-shrink: 0;
+            width: 2.25rem;
+            height: 2.25rem;
+
+            .tt-avatar {
+              width: 2.25rem;
+              height: 2.25rem;
+              border-radius: 50%;
+              object-fit: cover;
+              background: var(--ctp-surface-1);
+              border: 1px solid var(--ctp-surface-2);
+            }
+          }
+
+          .tt-chat-body {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: .2rem;
+
+            .tt-chat-meta {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: .35rem;
+
+              .tt-nickname {
+                font-weight: 600;
+                font-size: 13px;
+                color: var(--ctp-text);
+              }
+
+              .tt-uniqueid {
+                font-size: 11px;
+                color: var(--ctp-subtext-0);
+              }
+
+              .tt-time {
+                margin-left: auto;
+                font-size: 10px;
+                color: var(--ctp-overlay-1);
+              }
+            }
+
+            .tt-chat-content {
+              font-size: 13px;
+              color: var(--ctp-text);
+              line-height: 1.4;
+              word-break: break-word;
+
+              &.tt-gift-highlight {
+                display: flex;
+                align-items: center;
+                gap: .35rem;
+                flex-wrap: wrap;
+                color: var(--ctp-peach);
+                font-weight: 500;
+
+                .tt-gift-icon-inline {
+                  width: 1.25rem;
+                  height: 1.25rem;
+                  object-fit: contain;
+                  vertical-align: middle;
+                }
+              }
+            }
+          }
+        }
+
+        .tt-badge-role {
+          font-size: 9px;
+          font-weight: bold;
+          padding: 1px 4px;
+          border-radius: 3px;
+          line-height: 1.2;
+          text-transform: uppercase;
+
+          &.tt-badge-mod {
+            background: var(--ctp-sapphire);
+            color: var(--ctp-base);
+          }
+
+          &.tt-badge-sub {
+            background: var(--ctp-mauve);
+            color: var(--ctp-base);
+          }
+
+          &.tt-badge-friend {
+            background: var(--ctp-teal);
+            color: var(--ctp-base);
+          }
+
+          &.tt-badge-follower {
+            background: var(--ctp-surface-2);
+            color: var(--ctp-text);
+          }
+
+          &.tt-badge-gifter {
+            background: var(--ctp-yellow);
+            color: var(--ctp-base);
+          }
+
+          &.tt-badge-gift {
+            background: var(--ctp-peach);
+            color: var(--ctp-base);
+          }
+        }
+
+        .tt-gift-item {
+          display: flex;
+          flex-direction: row;
+          gap: .65rem;
+          padding: .5rem .65rem;
+          border-radius: .5rem;
+          background: var(--ctp-surface-0);
+          border: 1px solid rgba(245, 169, 127, 0.15);
+
+          .tt-avatar-wrapper {
+            flex-shrink: 0;
+            width: 2.25rem;
+            height: 2.25rem;
+
+            .tt-avatar {
+              width: 2.25rem;
+              height: 2.25rem;
+              border-radius: 50%;
+              object-fit: cover;
+              background: var(--ctp-surface-1);
+              border: 1px solid var(--ctp-surface-2);
+            }
+          }
+
+          .tt-gift-body {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: .2rem;
+
+            .tt-gift-meta {
+              display: flex;
+              align-items: center;
+              gap: .35rem;
+
+              .tt-nickname {
+                font-weight: 600;
+                font-size: 13px;
+                color: var(--ctp-text);
+              }
+
+              .tt-uniqueid {
+                font-size: 11px;
+                color: var(--ctp-subtext-0);
+              }
+
+              .tt-time {
+                margin-left: auto;
+                font-size: 10px;
+                color: var(--ctp-overlay-1);
+              }
+            }
+
+            .tt-gift-content {
+              display: flex;
+              align-items: center;
+              gap: .4rem;
+              flex-wrap: wrap;
+              margin-top: .15rem;
+              font-size: 13px;
+
+              .tt-gift-desc {
+                color: var(--ctp-subtext-1);
+
+                strong {
+                  color: var(--ctp-peach);
+                  font-weight: 600;
+                }
+              }
+
+              .tt-gift-icon {
+                width: 1.75rem;
+                height: 1.75rem;
+                object-fit: contain;
+              }
+
+              .tt-gift-emoji {
+                font-size: 1.25rem;
+              }
+
+              .tt-gift-repeat {
+                background: var(--ctp-peach);
+                color: var(--ctp-base);
+                font-weight: 700;
+                font-size: 11px;
+                padding: 1px 6px;
+                border-radius: 999px;
+              }
+
+              .tt-gift-diamonds {
+                background: rgba(183, 189, 248, 0.18);
+                color: var(--ctp-lavender);
+                font-weight: 600;
+                font-size: 11px;
+                padding: 1px 6px;
+                border-radius: 999px;
+              }
+            }
+          }
         }
       }
     }

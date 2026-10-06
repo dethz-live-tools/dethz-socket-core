@@ -17,6 +17,11 @@ var controllerFrame = () => {
           Time Left: <span id="spotify-time-left">0</span>
         </p>
       </p>
+      <p id="tiktok-status-wrapper">
+        <p id="tiktok-status-container">
+          TikTok Status: <span id="tiktok-status">🔴</span>
+        </p>
+      </p>
     </div>
   </div>
   <div id="controller">
