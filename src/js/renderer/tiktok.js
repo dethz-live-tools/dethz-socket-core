@@ -135,15 +135,16 @@ var tiktokChatRenderer = (data) => {
   if (emptyState) emptyState.remove();
 
   // Normalize data fields
-  const nickname = `${data.user.nickname} [@${data.user.uniqueId}]` || "Viewer";
-  const uniqueId = data.uniqueId || data.username || "";
+  const nickname =
+    `${data.user.nickname || "Viewer"} [@${data.user.uniqueId || ""}]` ||
+    "Viewer";
+  const uniqueId = data.user.uniqueId || "";
   const comment = data.comment || data.message || data.text || "";
   const avatar = data.user.profile || "";
   const createTime = data.createTime || data.timestamp || Date.now();
   const timeStr = new Date(
     Number(createTime) || Date.now(),
   ).toLocaleTimeString();
-  console.log(data);
 
   // Badges
   let badgesHtml = "";
@@ -215,17 +216,20 @@ var tiktokGiftRenderer = (data) => {
 
   // Normalize data fields
   const nickname =
-    data.nickname || data.user || data.username || data.uniqueId || "Viewer";
-  const uniqueId = data.uniqueId || data.username || "";
-  const giftName = data.giftName || data.describe || data.name || "Gift";
-  const giftIcon = data.giftPictureUrl || data.giftIcon || "";
-  const repeatCount = Number(data.repeatCount || data.count || 1);
-  const diamondCount = Number(data.diamondCount || 0);
-  const avatar = data.profilePictureUrl || data.avatarUrl || data.avatar || "";
+    `${data.user.nickname || "Viewer"} [@${data.user.uniqueId || ""}]` ||
+    "Viewer";
+  const uniqueId = data.user.uniqueId || "";
+  const comment = data.comment || data.message || data.text || "";
+  const avatar = data.user.profile || "";
   const createTime = data.createTime || data.timestamp || Date.now();
   const timeStr = new Date(
     Number(createTime) || Date.now(),
   ).toLocaleTimeString();
+
+  const giftName = data.giftName || data.describe || data.name || "Gift";
+  const giftIcon = data.giftPictureUrl || data.giftIcon || "";
+  const repeatCount = Number(data.repeatCount || data.count || 1);
+  const diamondCount = Number(data.diamondCount || 0);
 
   const escapedNick = escapeHtml(nickname);
   const escapedGiftName = escapeHtml(giftName);
