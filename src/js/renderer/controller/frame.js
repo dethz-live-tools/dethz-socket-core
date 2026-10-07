@@ -61,7 +61,14 @@ var controllerFrame = () => {
   document.querySelector("#main").innerHTML = element;
 };
 
+var currentSpotifyFrameState = null;
+
 var spotifyFrame = (state) => {
+  if (currentSpotifyFrameState === state && document.querySelector("#spt-dash")) {
+    return;
+  }
+  currentSpotifyFrameState = state;
+
   if (state) {
     document.querySelector("#spotify-controller").innerHTML =
       `<h3 id="spt-header">
@@ -94,62 +101,78 @@ var spotifyFrame = (state) => {
         }
       });
   } else {
+    const isHidden = localStorage.getItem("spt-hide") === "true";
     document.querySelector("#spotify-controller").innerHTML =
-      `<h3 id="spt-header">
+      `<h2 id="spt-header">
   Spotify Controller
-</h3>
+</h2>
 
-<div id="spt-dash" class="hidden isLogin">
+<div id="spt-dash" class="${isHidden ? "hidden " : ""}isLogin">
   <div class="spt-button-controller">
     <div id="spt-current-play"></div>
     
     <div class="player-controller">
-      <button id="spt-previous">
-        Previous
+      <button id="spt-previous" type="button" title="Previous Track">
+        ⏮ Previous
       </button>
-      <button id="spt-play">
-        Play
+      <button id="spt-play" type="button" title="Play or Pause">
+        ▶ Play
       </button> 
-      <button id="spt-next">
-        Next
+      <button id="spt-next" type="button" title="Next Track">
+        ⏭ Next
       </button>
     </div>
     
     <div class="volume-controller">
-      <button id="spt-volume-down">Volume Down</button>
-      <button id="spt-volume-up">Volume Up</button>
+      <button id="spt-volume-down" type="button" title="Volume Down">🔉 Vol -</button>
+      <button id="spt-volume-up" type="button" title="Volume Up">🔊 Vol +</button>
     </div>
     
     <form id="spotify-search">
-      <input type="text" placeholder="song name // song name + artist" id="context" name="context" />
-      <button type="submit">search</button>
+      <input type="text" placeholder="Search song or artist to queue..." id="context" name="context" required />
+      <button type="submit">Queue</button>
     </form>
     
     <div class="state-controller">
-      <button id="spt-logout">Logout</button>
-      <button id="spt-reauth">Re-Authenticate</button>
+      <button id="spt-reauth" type="button">Re-Authenticate</button>
+      <button id="spt-logout" type="button">Logout</button>
     </div>
   </div>
   <div class="spt-queue-controller">
-    <button id="pull-queue">
-      Pull Queue
-    </button> 
-    <div id="spt-queue"></div>
+    <div class="spt-panel-header">
+      <div class="spt-panel-title">
+        <span>🎵 Live Track Queue</span>
+        <span class="spt-badge" id="spt-queue-badge">0 tracks</span>
+      </div>
+      <button id="pull-queue" class="spt-btn-small" type="button" title="Refresh track queue">Refresh Queue</button>
+    </div>
+    <div id="spt-queue">
+      <div class="spt-empty-state">
+        <p>No tracks in queue</p>
+        <span>Queue will update as songs play or when searched</span>
+      </div>
+    </div>
   </div>
 </div>`;
 
-    if (localStorage.getItem("spt-hide") === "false") {
+    if (!isHidden) {
       document.querySelector("#spt-dash").classList.remove("hidden");
     }
 
-    const timeClass = document.querySelector("p#time").classList;
-
-    if (timeClass.contains("hidden")) {
-      timeClass.remove("hidden");
+    const timeEl = document.querySelector("p#time");
+    if (timeEl && timeEl.classList.contains("hidden")) {
+      timeEl.classList.remove("hidden");
     }
 
     spotifyListener();
     startTokenCountdown(token);
+
+    if (typeof requestPlayerStatus === "function") {
+      requestPlayerStatus(true);
+    }
+    if (typeof requestQueuePull === "function") {
+      requestQueuePull();
+    }
   }
 };
 window.controllerFrame = controllerFrame;

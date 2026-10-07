@@ -204,8 +204,96 @@ var tiktokChatRenderer = (data) => {
   }
 };
 
+var processedGiftKeys = new Set();
+var recentGiftSignatures = new Map();
+
 var tiktokGiftRenderer = (data) => {
   if (!data) return;
+
+  // Streakable / combo gift detection:
+  // In TikTok Live connector:
+  // - giftType === 1 indicates a streakable/combo gift (e.g. roses)
+  // - repeatEnd === true (or repeat_end === 1) indicates the combo/streak has finished
+  // - If giftType === 1 and repeatEnd is falsy, the user is still actively sending the combo streak.
+  const rawGiftType = data.gift?.type ?? data.giftType ?? data.type;
+  const giftType =
+    rawGiftType !== undefined && rawGiftType !== null
+      ? Number(rawGiftType)
+      : null;
+  const repeatCount = Number(
+    data.gift?.repeat || data.repeatCount || data.count || 1,
+  );
+  const isComboEnd = Boolean(
+    data.repeatEnd ||
+    data.repeat_end === 1 ||
+    data.isRepeatEnd ||
+    data.comboEnd ||
+    data.gift?.repeatEnd ||
+    data.gift?.repeat_end === 1,
+  );
+
+  // If streak in progress, wait until combo ends
+  if (
+    !isComboEnd &&
+    (giftType === 1 ||
+      repeatCount > 1 ||
+      data.repeatEnd === false ||
+      data.gift?.repeatEnd === false)
+  ) {
+    return;
+  }
+
+  // Deduplication check: prevent duplicate gift alerts for the same streak/message
+  const user = data.user || {};
+  const uniqueId =
+    user.uniqueId || data.uniqueId || user.id || data.userId || "";
+  const gift = data.gift || {};
+  const giftName =
+    gift.name || data.giftName || data.describe || data.name || "Gift";
+  const giftId = gift.id || data.giftId || "";
+  const groupId = data.groupId || gift.groupId || "";
+  const msgId = data.msgId || data.id || "";
+  const nowMs = Date.now();
+  const createTime = data.createTime || data.timestamp || nowMs;
+
+  // 1. Group / streak deduplication
+  if (groupId) {
+    const groupKey = `grp_${uniqueId}_${groupId}_${repeatCount}`;
+    if (processedGiftKeys.has(groupKey)) {
+      return;
+    }
+    processedGiftKeys.add(groupKey);
+  } else if (msgId) {
+    // 2. Message ID deduplication
+    const msgKey = `msg_${msgId}`;
+    if (processedGiftKeys.has(msgKey)) {
+      return;
+    }
+    processedGiftKeys.add(msgKey);
+  } else {
+    // 3. Fallback signature deduplication within a 3-second window
+    const signature = `${uniqueId}_${giftId || giftName}_${repeatCount}`;
+    if (recentGiftSignatures.has(signature)) {
+      const lastSeen = recentGiftSignatures.get(signature);
+      if (nowMs - lastSeen < 3000) {
+        return; // Duplicate event
+      }
+    }
+    recentGiftSignatures.set(signature, nowMs);
+
+    // Clean up signatures older than 10 seconds
+    if (recentGiftSignatures.size > 200) {
+      for (const [k, t] of recentGiftSignatures.entries()) {
+        if (nowMs - t > 10000) recentGiftSignatures.delete(k);
+      }
+    }
+  }
+
+  // Keep processed keys bounded to 500 items
+  if (processedGiftKeys.size > 500) {
+    const firstKey = processedGiftKeys.values().next().value;
+    if (firstKey) processedGiftKeys.delete(firstKey);
+  }
 
   const giftbox = document.querySelector("#tt-giftbox");
   const chatbox = document.querySelector("#tt-chatbox");
@@ -214,22 +302,19 @@ var tiktokGiftRenderer = (data) => {
   const emptyState = document.querySelector("#tt-gift-empty");
   if (emptyState) emptyState.remove();
 
-  // Normalize data fields
-  const nickname =
-    `${data.user.nickname || "Viewer"} [@${data.user.uniqueId || ""}]` ||
-    "Viewer";
-  const uniqueId = data.user.uniqueId || "";
-  const comment = data.comment || data.message || data.text || "";
-  const avatar = data.user.profile || "";
-  const createTime = data.createTime || data.timestamp || Date.now();
+  // Normalize user data display fields
+  const rawNickname =
+    user.nickname || data.nickname || (uniqueId ? uniqueId : "Viewer");
+  const nickname = uniqueId ? `${rawNickname} [@${uniqueId}]` : rawNickname;
+  const avatar =
+    user.profile || user.profilePictureUrl || data.avatar || data.profile || "";
   const timeStr = new Date(
     Number(createTime) || Date.now(),
   ).toLocaleTimeString();
 
-  const giftName = data.giftName || data.describe || data.name || "Gift";
-  const giftIcon = data.giftPictureUrl || data.giftIcon || "";
-  const repeatCount = Number(data.repeatCount || data.count || 1);
-  const diamondCount = Number(data.diamondCount || 0);
+  // Normalize gift display fields
+  const giftIcon = gift.image || data.giftPictureUrl || data.giftIcon || "";
+  const diamondCount = Number(gift.count || data.diamondCount || 0);
 
   const escapedNick = escapeHtml(nickname);
   const escapedGiftName = escapeHtml(giftName);
@@ -314,3 +399,4 @@ window.escapeHtml = escapeHtml;
 window.tiktokInitialElement = tiktokInitialElement;
 window.tiktokChatRenderer = tiktokChatRenderer;
 window.tiktokGiftRenderer = tiktokGiftRenderer;
+window.processedGiftKeys = processedGiftKeys;

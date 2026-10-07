@@ -3,20 +3,32 @@ var ws;
 
 var socketConnector = (ip) => {
   ws = new WebSocket(`ws://${ip}/ws`);
+  window.ws = ws;
 
   ws.onopen = () => {
     console.log("Connected to server");
     socketController(true);
 
-    ws.send("spt: SET TOKEN " + JSON.stringify(token));
-    ws.send("spt: player -- player");
+    if (typeof token !== "undefined" && token !== null) {
+      ws.send("spt: SET TOKEN " + JSON.stringify(token));
+      setTimeout(() => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send("spt: player -- player");
+          ws.send("spt: pulling");
+        }
+      }, 300);
+    }
   };
 
   ws.onmessage = (e) => {
     var msg = String(e.data);
 
     if (msg.startsWith("spt: ")) {
-      spotifyCommandHandler(msg);
+      if (typeof spotifyCommandHandler === "function") {
+        spotifyCommandHandler(msg);
+      } else {
+        console.log("Spotify handler not loaded:", msg);
+      }
     } else if (msg.startsWith("log: ")) {
       logHandler(msg);
     } else if (msg.startsWith("tt: ")) {
