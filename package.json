@@ -1,0 +1,6 @@
+{
+  "name": "dethz-socket-core",
+  "version": "1.0.1",
+  "description": "Stream overlay socket core client and dashboard controller",
+  "type": "module"
+}

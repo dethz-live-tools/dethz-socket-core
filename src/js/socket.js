@@ -61,6 +61,10 @@ var controllerRenderer = (ip) => {
   spotifyInit();
   tiktokInitialElement();
 
+  if (typeof initCoreUpdater === "function") {
+    initCoreUpdater();
+  }
+
   socketConnector(ip);
 };
 

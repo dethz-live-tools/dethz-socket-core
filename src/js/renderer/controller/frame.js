@@ -18,7 +18,10 @@ var controllerFrame = () => {
           <span class="brand-subtitle">Overlay Controller</span>
         </div>
       </div>
-      <span class="brand-version">v1.2</span>
+      <div class="brand-meta">
+        <span class="brand-version" id="core-version">v1.0.1</span>
+        <button type="button" class="brand-update-badge hidden" id="brand-update-badge" title="New core version available">NEW</button>
+      </div>
     </div>
 
     <div class="status-container">
@@ -64,6 +67,26 @@ var controllerFrame = () => {
         </div>
         <div class="status-tile-detail">
           <span id="tiktok-sidebar-user">Live Chat & Gifts</span>
+        </div>
+      </div>
+
+      <!-- Core Update Status Tile -->
+      <div class="status-tile" id="update-status-wrapper">
+        <div id="update-status-container" class="status-tile-header">
+          <div class="status-tile-title">
+            <span class="tile-icon">🔄</span>
+            <span>Core Update</span>
+          </div>
+          <span id="update-status-indicator" class="status-indicator" title="System update status">⚪</span>
+        </div>
+        <div class="status-tile-detail update-tile-detail">
+          <span id="update-status-text">Checking for updates...</span>
+          <button type="button" id="btn-check-update" class="update-check-btn" title="Check for core updates">Check</button>
+        </div>
+        <div id="update-action-container" class="update-action-row hidden">
+          <button type="button" id="btn-apply-update" class="update-apply-btn">
+            <span>Install Update</span> <span id="update-target-version"></span>
+          </button>
         </div>
       </div>
     </div>
