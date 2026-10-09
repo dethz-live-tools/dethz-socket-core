@@ -88,6 +88,11 @@ var tiktokController = (isOnline) => {
     statusEl.innerHTML = isOnline ? "🟢" : "🔴";
   }
 
+  const userSidebar = document.querySelector("#tiktok-sidebar-user");
+  if (userSidebar && !isOnline) {
+    userSidebar.innerText = "Live Chat & Gifts";
+  }
+
   if (isOnline) {
     const container = document.querySelector("#tiktok-container");
     if (container && container.classList.contains("hidden")) {

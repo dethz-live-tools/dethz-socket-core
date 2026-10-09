@@ -16,12 +16,28 @@ var tiktokInitialElement = (isLogin) => {
   const container = document.querySelector("#tiktok-container");
   if (!container) return;
 
+  const sidebarUser = document.querySelector("#tiktok-sidebar-user");
+
   if (!isLogin) {
+    if (sidebarUser) sidebarUser.innerText = "Live Chat & Gifts";
+
     const savedUser = window.localStorage.getItem("tt-username") || "";
-    container.innerHTML = `<form id="tiktok-connect">
-  <input id="tt-username" placeholder="TikTok Username (e.g. username)" value="${escapeHtml(savedUser)}" required />
-  <button type="submit">Connect</button>
-</form>`;
+    container.innerHTML = `<div class="tt-connect-wrapper">
+  <div class="tt-connect-hero">
+    <div class="tt-hero-icon">📱</div>
+    <div class="tt-hero-text">
+      <h3>Connect to TikTok Live</h3>
+      <p>Enter the streamer's username to capture live comments, badges, and gifts directly on your stream overlay.</p>
+    </div>
+  </div>
+  <form id="tiktok-connect" class="tt-connect-form">
+    <div class="tt-input-group">
+      <span class="tt-input-at">@</span>
+      <input id="tt-username" placeholder="TikTok Username (e.g. username)" value="${escapeHtml(savedUser)}" required autocomplete="off" />
+      <button type="submit" class="tt-connect-btn">Connect Stream</button>
+    </div>
+  </form>
+</div>`;
 
     const statusEl = document.querySelector("#tiktok-status");
     if (statusEl) statusEl.innerHTML = "🔴";
@@ -51,6 +67,8 @@ var tiktokInitialElement = (isLogin) => {
   } else {
     const username =
       window.localStorage.getItem("tt-username") || "Connected User";
+
+    if (sidebarUser) sidebarUser.innerText = `@${username}`;
 
     container.innerHTML = `<div id="current-connect">
   <div class="tt-conn-info">

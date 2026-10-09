@@ -1,1006 +1,1669 @@
+/* ==========================================================================
+   Controller Interface Styles - Catppuccin Macchiato Theme
+   ========================================================================== */
+
+/* Main Layout Grid */
 .main-container {
   width: 100%;
   height: 100dvh;
-
   display: flex;
   flex-direction: row;
-
-  #status {
-    width: 30%;
-    height: 100dvh;
-
-    border-right: 1px solid var(--ctp-surface-2);
-
-    .status-container {
-      display: flex;
-      flex-direction: column;
-
-      padding: 1rem;
-
-      p {
-        padding: 0;
-        margin: 0;
-      }
-    }
-  }
-
-  #controller {
-    width: 70%;
-    height: 100dvh;
-
-    overflow-y: auto;
-
-    display: flex;
-    align-items: start;
-    justify-content: start;
-  }
-
-  .controller-container {
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    padding: 1rem;
-
-    #spotify-controller {
-      #spt-header {
-        cursor: pointer;
-        user-select: none;
-      }
-
-      #spt-login {
-        background: var(--ctp-green);
-        color: var(--ctp-base);
-        border: 0;
-        padding: .5rem 1rem;
-        border-radius: .5rem;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 14px;
-        transition: opacity .2s;
-
-        &:hover {
-          opacity: .85;
-        }
-      }
-
-      #spt-dash {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-
-        &.isLogin {
-          flex-direction: row;
-        }
-
-        .spt-button-controller {
-          flex: 1;
-          min-width: 0;
-          display: flex;
-          flex-direction: column;
-          gap: .75rem;
-
-          #spt-player-status {
-            background: var(--ctp-surface-0);
-            border: 1px solid var(--ctp-surface-1);
-            border-radius: .75rem;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: .75rem;
-            width: 100%;
-            box-sizing: border-box;
-
-            &.idle {
-              align-items: center;
-              justify-content: center;
-              text-align: center;
-            }
-
-            #current-play {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              gap: .75rem;
-
-              img, #cover-img {
-                width: 4.5rem;
-                height: 4.5rem;
-                border-radius: .5rem;
-                object-fit: cover;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
-                background: var(--ctp-surface-1);
-                flex-shrink: 0;
-              }
-
-              #current-play-text {
-                display: flex;
-                flex-direction: column;
-                gap: .2rem;
-                min-width: 0;
-                flex: 1;
-                overflow: hidden;
-
-                #song-name {
-                  font-weight: 700;
-                  font-size: 15px;
-                  color: var(--ctp-text);
-                  margin: 0;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                }
-
-                #artist-name {
-                  font-size: 13px;
-                  color: var(--ctp-subtext-0);
-                  margin: 0;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                }
-              }
-            }
-
-            hr {
-              width: 100%;
-              border: 0;
-              border-top: 1px solid var(--ctp-surface-1);
-              margin: 0;
-            }
-
-            #device {
-              display: flex;
-              align-items: center;
-              gap: .5rem;
-              font-size: 12px;
-              color: var(--ctp-subtext-1);
-
-              p {
-                margin: 0;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
-            }
-
-            #player-state {
-              display: flex;
-              align-items: center;
-              gap: .75rem;
-              font-size: 11px;
-              color: var(--ctp-overlay-2);
-
-              p {
-                margin: 0;
-              }
-            }
-
-            #spt-refresh-player {
-              background: var(--ctp-surface-2);
-              color: var(--ctp-text);
-              border: 0;
-              padding: .4rem .85rem;
-              border-radius: .4rem;
-              font-size: 12px;
-              font-weight: 600;
-              cursor: pointer;
-              align-self: flex-start;
-              transition: opacity .2s;
-
-              &:hover {
-                opacity: .85;
-              }
-            }
-          }
-
-          .player-controller,
-          .volume-controller,
-          .state-controller {
-            display: flex;
-            flex-direction: row;
-            gap: .5rem;
-            width: 100%;
-            box-sizing: border-box;
-
-            button {
-              flex: 1;
-              padding: .5rem .75rem;
-              border-radius: .5rem;
-              font-size: 13px;
-              font-weight: 600;
-              border: 0;
-              cursor: pointer;
-              transition: opacity .2s, transform .1s;
-
-              &:hover {
-                opacity: .85;
-              }
-
-              &:active {
-                transform: scale(.98);
-              }
-            }
-          }
-
-          .player-controller {
-            #spt-previous, #spt-next {
-              background: var(--ctp-surface-2);
-              color: var(--ctp-text);
-            }
-
-            #spt-play {
-              background: var(--ctp-green);
-              color: var(--ctp-base);
-              font-weight: 700;
-            }
-          }
-
-          .volume-controller {
-            #spt-volume-down, #spt-volume-up {
-              background: var(--ctp-surface-1);
-              color: var(--ctp-text);
-            }
-          }
-
-          .state-controller {
-            #spt-reauth {
-              background: var(--ctp-surface-2);
-              color: var(--ctp-text);
-            }
-
-            #spt-logout {
-              background: var(--ctp-red);
-              color: var(--ctp-base);
-            }
-          }
-
-          form#spotify-search {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            box-sizing: border-box;
-
-            input {
-              flex: 1;
-              min-width: 0;
-              background: var(--ctp-crust);
-              border: 1px solid var(--ctp-surface-2);
-              padding: .5rem .75rem;
-              border-top-left-radius: .5rem;
-              border-bottom-left-radius: .5rem;
-              color: var(--ctp-text);
-              font-size: 13px;
-              outline: none;
-
-              &:focus {
-                border-color: var(--ctp-sapphire);
-              }
-            }
-
-            button {
-              border: 0;
-              background: var(--ctp-sapphire);
-              color: var(--ctp-base);
-              font-weight: 700;
-              padding: .5rem 1rem;
-              border-top-right-radius: .5rem;
-              border-bottom-right-radius: .5rem;
-              cursor: pointer;
-              font-size: 13px;
-
-              &:hover {
-                opacity: .85;
-              }
-            }
-          }
-        }
-
-        .spt-queue-controller {
-          flex: 1;
-          min-width: 0;
-          display: flex;
-          flex-direction: column;
-          background: var(--ctp-surface-0);
-          border: 1px solid var(--ctp-surface-1);
-          border-radius: .75rem;
-          overflow: hidden;
-
-          .spt-panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: .65rem .85rem;
-            background: var(--ctp-surface-1);
-            border-bottom: 1px solid var(--ctp-surface-2);
-
-            .spt-panel-title {
-              display: flex;
-              align-items: center;
-              gap: .5rem;
-              font-weight: 600;
-              font-size: 14px;
-              color: var(--ctp-text);
-            }
-
-            .spt-badge {
-              background: var(--ctp-crust);
-              color: var(--ctp-subtext-1);
-              font-size: 11px;
-              padding: 2px 7px;
-              border-radius: 999px;
-            }
-
-            #pull-queue {
-              background: var(--ctp-surface-2);
-              color: var(--ctp-text);
-              border: 0;
-              padding: .25rem .65rem;
-              border-radius: .35rem;
-              font-size: 11px;
-              font-weight: 500;
-              cursor: pointer;
-              transition: background .15s;
-
-              &:hover {
-                background: var(--ctp-overlay-0);
-              }
-            }
-          }
-
-          #spt-queue {
-            height: 22rem;
-            max-height: 26rem;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: .5rem;
-            display: flex;
-            flex-direction: column;
-            gap: .4rem;
-            background: var(--ctp-crust);
-
-            &::-webkit-scrollbar {
-              width: 6px;
-            }
-
-            &::-webkit-scrollbar-track {
-              background: var(--ctp-crust);
-            }
-
-            &::-webkit-scrollbar-thumb {
-              background: var(--ctp-surface-2);
-              border-radius: 3px;
-            }
-
-            .queue-item {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              gap: .65rem;
-              padding: .45rem .65rem;
-              border-radius: .5rem;
-              background: var(--ctp-surface-0);
-              border: 1px solid rgba(255, 255, 255, .03);
-              width: 100%;
-              box-sizing: border-box;
-              transition: background .15s;
-
-              &:hover {
-                background: var(--ctp-surface-1);
-              }
-
-              .queue-index {
-                font-size: 11px;
-                font-weight: 700;
-                color: var(--ctp-overlay-1);
-                min-width: 1.5rem;
-                text-align: center;
-              }
-
-              .queue-art {
-                width: 2.5rem;
-                height: 2.5rem;
-                border-radius: .35rem;
-                object-fit: cover;
-                flex-shrink: 0;
-                background: var(--ctp-surface-1);
-              }
-
-              .track-text {
-                flex: 1;
-                min-width: 0;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-
-                .track-name {
-                  font-weight: 600;
-                  font-size: 13px;
-                  color: var(--ctp-text);
-                  margin: 0;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                }
-
-                .track-artist {
-                  font-size: 11px;
-                  color: var(--ctp-subtext-0);
-                  margin: 0;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                }
-              }
-            }
-
-            .spt-empty-state {
-              margin: auto;
-              text-align: center;
-              color: var(--ctp-subtext-0);
-              padding: 2rem 1rem;
-
-              p {
-                margin: 0 0 .25rem 0;
-                font-weight: 600;
-                font-size: 14px;
-                color: var(--ctp-text);
-              }
-
-              span {
-                font-size: 12px;
-                color: var(--ctp-overlay-1);
-              }
-            }
-          }
-        }
-      }      
-    }
-
-    #log-controller {
-      #console-container {
-        #log-box {
-          background: var(--ctp-crust);
-          color: var(--ctp-text);
-          border-radius: 1rem;
-          padding: .5rem;
-
-          margin: 0 auto;
-
-          width: 80%;
-          height: 20rem;
-
-          overflow-y: auto;
-
-          display: flex;
-          flex-direction: column;
-          gap: .5rem;
-
-          .logData {
-            display: flex;
-            flex-direction: row;
-            gap: .5rem;
-
-            .date {
-              border-right: 1px solid var(--ctp-surface-2);
-              width: 30%;
-            }
-
-            .data {
-              width: 100%;
-
-              &.error {
-                color: var(--ctp-red);
-              }
-
-              &.success {
-                color: var(--ctp-green);
-              }
-            }
-          }
-        }
-      }
-    }
-    
-    #tiktok-container {
-      form#tiktok-connect {
-        display: flex;
-        flex-direction: row;
-        max-width: 28rem;
-
-        input {
-          flex: 1;
-          background: var(--ctp-crust);
-          border: 1px solid var(--ctp-surface-2);
-          padding: .5rem .75rem;
-          border-top-left-radius: .5rem;
-          border-bottom-left-radius: .5rem;
-          color: var(--ctp-text);
-          font-size: 14px;
-
-          &:focus,
-          &:hover {
-            border-color: var(--ctp-sapphire);
-            outline: none;
-          }
-        }
-
-        button {
-          border: 0;
-          background: var(--ctp-green);
-          color: var(--ctp-base);
-          font-weight: 600;
-          padding: .5rem 1rem;
-          border-top-right-radius: .5rem;
-          border-bottom-right-radius: .5rem;
-          font-size: 14px;
-
-          &:hover {
-            cursor: pointer;
-            opacity: .8;
-          }
-        }
-      }
-
-      #current-connect {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: .75rem;
-        background: var(--ctp-surface-0);
-        padding: .75rem 1rem;
-        border-radius: .75rem;
-        border: 1px solid var(--ctp-surface-1);
-        margin-bottom: 1rem;
-
-        .tt-conn-info {
-          display: flex;
-          align-items: center;
-          gap: .5rem;
-
-          .tt-conn-badge {
-            background: rgba(166, 218, 149, 0.2);
-            color: var(--ctp-green);
-            font-size: 11px;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 999px;
-            letter-spacing: .5px;
-          }
-
-          .tt-conn-text {
-            font-size: 14px;
-            color: var(--ctp-text);
-
-            strong {
-              color: var(--ctp-sapphire);
-            }
-          }
-        }
-
-        .tt-stats-bar {
-          display: flex;
-          align-items: center;
-          gap: .75rem;
-          flex-wrap: wrap;
-
-          .tt-stat-item {
-            display: flex;
-            align-items: center;
-            gap: .35rem;
-            background: var(--ctp-crust);
-            padding: .25rem .6rem;
-            border-radius: .5rem;
-            font-size: 12px;
-
-            .tt-stat-label {
-              color: var(--ctp-subtext-0);
-            }
-
-            .tt-stat-value {
-              font-weight: bold;
-              color: var(--ctp-text);
-            }
-          }
-        }
-
-        #tt-disconnect {
-          background: var(--ctp-red);
-          color: var(--ctp-base);
-          border: 0;
-          padding: .4rem .85rem;
-          border-radius: .5rem;
-          font-weight: bold;
-          font-size: 13px;
-          cursor: pointer;
-          transition: opacity .2s;
-
-          &:hover {
-            opacity: .8;
-          }
-        }
-      }
-
-      #tt-dash {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        width: 100%;
-
-        #tt-chat-container,
-        #tt-gift-container {
-          flex: 1;
-          min-width: 0;
-          display: flex;
-          flex-direction: column;
-          background: var(--ctp-surface-0);
-          border: 1px solid var(--ctp-surface-1);
-          border-radius: .75rem;
-          overflow: hidden;
-        }
-
-        .tt-panel-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: .65rem .85rem;
-          background: var(--ctp-surface-1);
-          border-bottom: 1px solid var(--ctp-surface-2);
-
-          .tt-panel-title {
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--ctp-text);
-
-            .tt-badge {
-              background: var(--ctp-crust);
-              color: var(--ctp-subtext-1);
-              font-size: 11px;
-              padding: 2px 7px;
-              border-radius: 999px;
-              font-weight: normal;
-            }
-          }
-
-          .tt-panel-controls {
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-
-            .tt-toggle-label {
-              display: inline-flex;
-              align-items: center;
-              gap: .35rem;
-              font-size: 12px;
-              color: var(--ctp-subtext-1);
-              cursor: pointer;
-              user-select: none;
-
-              input[type="checkbox"] {
-                cursor: pointer;
-                accent-color: var(--ctp-sapphire);
-              }
-            }
-
-            .tt-btn-small {
-              background: var(--ctp-surface-2);
-              color: var(--ctp-text);
-              border: 0;
-              padding: .2rem .55rem;
-              border-radius: .35rem;
-              font-size: 11px;
-              cursor: pointer;
-
-              &:hover {
-                background: var(--ctp-overlay-0);
-              }
-            }
-          }
-        }
-
-        .tt-scrollbox {
-          height: 22rem;
-          max-height: 26rem;
-          overflow-y: auto;
-          overflow-x: hidden;
-          padding: .75rem;
-          display: flex;
-          flex-direction: column;
-          gap: .5rem;
-          background: var(--ctp-crust);
-
-          &::-webkit-scrollbar {
-            width: 6px;
-          }
-
-          &::-webkit-scrollbar-track {
-            background: var(--ctp-crust);
-          }
-
-          &::-webkit-scrollbar-thumb {
-            background: var(--ctp-surface-2);
-            border-radius: 3px;
-          }
-
-          &::-webkit-scrollbar-thumb:hover {
-            background: var(--ctp-overlay-0);
-          }
-
-          .tt-empty-state {
-            margin: auto;
-            text-align: center;
-            color: var(--ctp-subtext-0);
-            padding: 2rem 1rem;
-
-            p {
-              margin: 0 0 .25rem 0;
-              font-weight: 500;
-              font-size: 14px;
-            }
-
-            span {
-              font-size: 12px;
-              color: var(--ctp-overlay-1);
-            }
-          }
-        }
-
-        .tt-chat-item {
-          display: flex;
-          flex-direction: row;
-          gap: .65rem;
-          padding: .5rem .65rem;
-          border-radius: .5rem;
-          background: var(--ctp-surface-0);
-          border: 1px solid rgba(255, 255, 255, 0.03);
-          transition: background .15s ease;
-
-          &:hover {
-            background: var(--ctp-surface-1);
-          }
-
-          &.tt-chat-gift {
-            background: rgba(245, 169, 127, 0.08);
-            border-left: 3px solid var(--ctp-peach);
-          }
-
-          .tt-avatar-wrapper {
-            flex-shrink: 0;
-            width: 2.25rem;
-            height: 2.25rem;
-
-            .tt-avatar {
-              width: 2.25rem;
-              height: 2.25rem;
-              border-radius: 50%;
-              object-fit: cover;
-              background: var(--ctp-surface-1);
-              border: 1px solid var(--ctp-surface-2);
-            }
-          }
-
-          .tt-chat-body {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: .2rem;
-
-            .tt-chat-meta {
-              display: flex;
-              align-items: center;
-              flex-wrap: wrap;
-              gap: .35rem;
-
-              .tt-nickname {
-                font-weight: 600;
-                font-size: 13px;
-                color: var(--ctp-text);
-              }
-
-              .tt-uniqueid {
-                font-size: 11px;
-                color: var(--ctp-subtext-0);
-              }
-
-              .tt-time {
-                margin-left: auto;
-                font-size: 10px;
-                color: var(--ctp-overlay-1);
-              }
-            }
-
-            .tt-chat-content {
-              font-size: 13px;
-              color: var(--ctp-text);
-              line-height: 1.4;
-              word-break: break-word;
-
-              &.tt-gift-highlight {
-                display: flex;
-                align-items: center;
-                gap: .35rem;
-                flex-wrap: wrap;
-                color: var(--ctp-peach);
-                font-weight: 500;
-
-                .tt-gift-icon-inline {
-                  width: 1.25rem;
-                  height: 1.25rem;
-                  object-fit: contain;
-                  vertical-align: middle;
-                }
-              }
-            }
-          }
-        }
-
-        .tt-badge-role {
-          font-size: 9px;
-          font-weight: bold;
-          padding: 1px 4px;
-          border-radius: 3px;
-          line-height: 1.2;
-          text-transform: uppercase;
-
-          &.tt-badge-mod {
-            background: var(--ctp-sapphire);
-            color: var(--ctp-base);
-          }
-
-          &.tt-badge-sub {
-            background: var(--ctp-mauve);
-            color: var(--ctp-base);
-          }
-
-          &.tt-badge-friend {
-            background: var(--ctp-teal);
-            color: var(--ctp-base);
-          }
-
-          &.tt-badge-follower {
-            background: var(--ctp-surface-2);
-            color: var(--ctp-text);
-          }
-
-          &.tt-badge-gifter {
-            background: var(--ctp-yellow);
-            color: var(--ctp-base);
-          }
-
-          &.tt-badge-gift {
-            background: var(--ctp-peach);
-            color: var(--ctp-base);
-          }
-        }
-
-        .tt-gift-item {
-          display: flex;
-          flex-direction: row;
-          gap: .65rem;
-          padding: .5rem .65rem;
-          border-radius: .5rem;
-          background: var(--ctp-surface-0);
-          border: 1px solid rgba(245, 169, 127, 0.15);
-
-          .tt-avatar-wrapper {
-            flex-shrink: 0;
-            width: 2.25rem;
-            height: 2.25rem;
-
-            .tt-avatar {
-              width: 2.25rem;
-              height: 2.25rem;
-              border-radius: 50%;
-              object-fit: cover;
-              background: var(--ctp-surface-1);
-              border: 1px solid var(--ctp-surface-2);
-            }
-          }
-
-          .tt-gift-body {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: .2rem;
-
-            .tt-gift-meta {
-              display: flex;
-              align-items: center;
-              gap: .35rem;
-
-              .tt-nickname {
-                font-weight: 600;
-                font-size: 13px;
-                color: var(--ctp-text);
-              }
-
-              .tt-uniqueid {
-                font-size: 11px;
-                color: var(--ctp-subtext-0);
-              }
-
-              .tt-time {
-                margin-left: auto;
-                font-size: 10px;
-                color: var(--ctp-overlay-1);
-              }
-            }
-
-            .tt-gift-content {
-              display: flex;
-              align-items: center;
-              gap: .4rem;
-              flex-wrap: wrap;
-              margin-top: .15rem;
-              font-size: 13px;
-
-              .tt-gift-desc {
-                color: var(--ctp-subtext-1);
-
-                strong {
-                  color: var(--ctp-peach);
-                  font-weight: 600;
-                }
-              }
-
-              .tt-gift-icon {
-                width: 1.75rem;
-                height: 1.75rem;
-                object-fit: contain;
-              }
-
-              .tt-gift-emoji {
-                font-size: 1.25rem;
-              }
-
-              .tt-gift-repeat {
-                background: var(--ctp-peach);
-                color: var(--ctp-base);
-                font-weight: 700;
-                font-size: 11px;
-                padding: 1px 6px;
-                border-radius: 999px;
-              }
-
-              .tt-gift-diamonds {
-                background: rgba(183, 189, 248, 0.18);
-                color: var(--ctp-lavender);
-                font-weight: 600;
-                font-size: 11px;
-                padding: 1px 6px;
-                border-radius: 999px;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+  background-color: var(--ctp-base);
+  color: var(--ctp-text);
+  overflow: hidden;
 }
 
+/* ==========================================================================
+   Left Sidebar Navigation & Status Panels (#status)
+   ========================================================================== */
+#status {
+  width: 280px;
+  min-width: 260px;
+  max-width: 300px;
+  height: 100dvh;
+  background-color: var(--ctp-mantle);
+  border-right: 1px solid var(--ctp-surface-0);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.status-brand {
+  padding: 1.25rem 1.15rem;
+  border-bottom: 1px solid var(--ctp-surface-0);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--ctp-sapphire), var(--ctp-mauve));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  box-shadow: 0 2px 8px rgba(125, 196, 228, 0.3);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--ctp-text);
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 11px;
+  color: var(--ctp-subtext-0);
+}
+
+.brand-version {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--ctp-surface-0);
+  color: var(--ctp-subtext-1);
+  border: 1px solid var(--ctp-surface-1);
+}
+
+.status-container {
+  flex: 1;
+  padding: 1rem 0.85rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sidebar-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ctp-overlay-1);
+  padding: 0 0.25rem;
+  margin-bottom: 0.15rem;
+}
+
+/* Individual Status Card */
+.status-tile {
+  background-color: var(--ctp-surface-0);
+  border: 1px solid var(--ctp-surface-1);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.status-tile:hover {
+  border-color: var(--ctp-surface-2);
+  background-color: rgba(54, 58, 79, 0.85);
+}
+
+.status-tile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-tile-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ctp-text);
+}
+
+.tile-icon {
+  font-size: 14px;
+}
+
+.status-indicator {
+  font-size: 13px;
+  line-height: 1;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4));
+}
+
+.status-tile-detail {
+  font-size: 11px;
+  color: var(--ctp-subtext-0);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-tile-time {
+  margin-top: 0.15rem;
+  font-size: 11px;
+  color: var(--ctp-subtext-1);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.time-badge {
+  background: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: var(--ctp-peach);
+}
+
+.sidebar-footer {
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--ctp-surface-0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.system-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 11px;
+  color: var(--ctp-subtext-0);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Main Controller Content Area (#controller)
+   ========================================================================== */
+#controller {
+  flex: 1;
+  min-width: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--ctp-base);
+}
+
+.controller-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Generic Controller Card Panel */
+.controller-card {
+  background-color: var(--ctp-surface-0);
+  border: 1px solid var(--ctp-surface-1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.controller-card:hover {
+  border-color: rgba(91, 96, 120, 0.7);
+}
+
+/* Common Collapsible Header */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(to right, var(--ctp-surface-1), var(--ctp-surface-0));
+  border-bottom: 1px solid var(--ctp-surface-1);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.card-header:hover {
+  background: var(--ctp-surface-1);
+}
+
+.card-header:focus-visible {
+  outline: 2px solid var(--ctp-sapphire);
+  outline-offset: -2px;
+}
+
+.card-header .header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.card-header .header-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--ctp-surface-0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ctp-text);
+  line-height: 1.25;
+}
+
+.card-desc {
+  font-size: 11px;
+  color: var(--ctp-subtext-0);
+  display: block;
+  margin-top: 2px;
+}
+
+.collapse-chevron {
+  font-size: 10px;
+  color: var(--ctp-overlay-2);
+  transition: transform 0.25s ease;
+  user-select: none;
+}
+
+/* Rotate chevron when sibling content is hidden */
+.card-header:has(+ .hidden) .collapse-chevron {
+  transform: rotate(-90deg);
+}
+
+/* ==========================================================================
+   Socket Controller Bar (#socket-controller)
+   ========================================================================== */
+#socket-controller:empty {
+  display: none;
+}
+
+.socket-card-content {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background-color: var(--ctp-surface-0);
+}
+
+.socket-status-bar,
+.socket-offline-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.socket-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ctp-text);
+}
+
+.socket-message-form {
+  display: flex;
+  width: 100%;
+}
+
+.socket-input-wrapper {
+  display: flex;
+  width: 100%;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.socket-input-wrapper:focus-within {
+  border-color: var(--ctp-sapphire);
+  box-shadow: 0 0 0 2px rgba(125, 196, 228, 0.2);
+}
+
+.socket-input-wrapper input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.85rem;
+  background: transparent;
+  border: 0;
+  color: var(--ctp-text);
+  font-size: 13px;
+  outline: none;
+}
+
+.socket-input-wrapper input::placeholder {
+  color: var(--ctp-overlay-0);
+}
+
+/* Action Buttons */
+.btn-primary-sm {
+  background: var(--ctp-sapphire);
+  color: var(--ctp-base);
+  border: 0;
+  padding: 0.5rem 1rem;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary-sm:hover {
+  opacity: 0.9;
+}
+
+.btn-danger-sm {
+  background: rgba(237, 135, 150, 0.15);
+  color: var(--ctp-red);
+  border: 1px solid rgba(237, 135, 150, 0.35);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger-sm:hover {
+  background: var(--ctp-red);
+  color: var(--ctp-base);
+  border-color: var(--ctp-red);
+}
+
+/* ==========================================================================
+   TikTok Controller (#tiktok-controller)
+   ========================================================================== */
+.tt-connect-wrapper {
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+}
+
+.tt-connect-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 28rem;
+}
+
+.tt-hero-icon {
+  font-size: 2.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.tt-hero-text h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--ctp-text);
+}
+
+.tt-hero-text p {
+  margin: 0.25rem 0 0 0;
+  font-size: 12px;
+  color: var(--ctp-subtext-0);
+  line-height: 1.4;
+}
+
+.tt-connect-form {
+  width: 100%;
+  max-width: 24rem;
+}
+
+.tt-input-group {
+  display: flex;
+  align-items: center;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tt-input-group:focus-within {
+  border-color: var(--ctp-green);
+  box-shadow: 0 0 0 3px rgba(166, 218, 149, 0.2);
+}
+
+.tt-input-at {
+  padding: 0.55rem 0.75rem;
+  background-color: var(--ctp-surface-0);
+  border-right: 1px solid var(--ctp-surface-2);
+  color: var(--ctp-overlay-2);
+  font-size: 14px;
+  font-weight: 700;
+  user-select: none;
+}
+
+.tt-input-group input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.85rem;
+  background: transparent;
+  border: 0;
+  color: var(--ctp-text);
+  font-size: 13px;
+  outline: none;
+}
+
+.tt-connect-btn {
+  background: var(--ctp-green);
+  color: var(--ctp-base);
+  border: 0;
+  padding: 0.55rem 1rem;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tt-connect-btn:hover {
+  opacity: 0.9;
+}
+
+/* TikTok Connected Header Bar */
+#current-connect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background-color: var(--ctp-surface-1);
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--ctp-surface-2);
+}
+
+.tt-conn-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tt-conn-badge {
+  background: rgba(166, 218, 149, 0.2);
+  color: var(--ctp-green);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+.tt-conn-text {
+  font-size: 13px;
+  color: var(--ctp-text);
+}
+
+.tt-conn-text strong {
+  color: var(--ctp-sapphire);
+}
+
+.tt-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.tt-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-2);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.tt-stat-label {
+  color: var(--ctp-subtext-0);
+}
+
+.tt-stat-value {
+  font-weight: 700;
+  color: var(--ctp-text);
+}
+
+#tt-disconnect {
+  background-color: rgba(237, 135, 150, 0.15);
+  color: var(--ctp-red);
+  border: 1px solid rgba(237, 135, 150, 0.35);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#tt-disconnect:hover {
+  background-color: var(--ctp-red);
+  color: var(--ctp-base);
+  border-color: var(--ctp-red);
+}
+
+/* TikTok Feeds Grid */
+#tt-dash {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  width: 100%;
+}
+
+#tt-chat-container,
+#tt-gift-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ctp-surface-0);
+  border: 1px solid var(--ctp-surface-1);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.tt-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--ctp-surface-1);
+  border-bottom: 1px solid var(--ctp-surface-2);
+}
+
+.tt-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ctp-text);
+}
+
+.tt-badge {
+  background-color: var(--ctp-crust);
+  color: var(--ctp-subtext-1);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: normal;
+}
+
+.tt-panel-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tt-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 11px;
+  color: var(--ctp-subtext-1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.tt-toggle-label input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--ctp-sapphire);
+}
+
+.tt-btn-small {
+  background-color: var(--ctp-surface-2);
+  color: var(--ctp-text);
+  border: 0;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.tt-btn-small:hover {
+  background-color: var(--ctp-overlay-0);
+}
+
+.tt-scrollbox {
+  height: 24rem;
+  max-height: 28rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--ctp-crust);
+}
+
+.tt-empty-state {
+  margin: auto;
+  text-align: center;
+  color: var(--ctp-subtext-0);
+  padding: 2rem 1rem;
+}
+
+.tt-empty-state p {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ctp-text);
+}
+
+.tt-empty-state span {
+  font-size: 12px;
+  color: var(--ctp-overlay-1);
+}
+
+/* Chat Row */
+.tt-chat-item {
+  display: flex;
+  flex-direction: row;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--ctp-surface-0);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background-color 0.15s ease;
+}
+
+.tt-chat-item:hover {
+  background-color: var(--ctp-surface-1);
+}
+
+.tt-chat-item.tt-chat-gift {
+  background-color: rgba(245, 169, 127, 0.08);
+  border-left: 3px solid var(--ctp-peach);
+}
+
+.tt-avatar-wrapper {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.tt-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--ctp-surface-1);
+  border: 1px solid var(--ctp-surface-2);
+}
+
+.tt-chat-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tt-chat-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tt-nickname {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ctp-text);
+}
+
+.tt-uniqueid {
+  font-size: 11px;
+  color: var(--ctp-subtext-0);
+}
+
+.tt-time {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--ctp-overlay-1);
+}
+
+.tt-chat-content {
+  font-size: 13px;
+  color: var(--ctp-text);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.tt-chat-content.tt-gift-highlight {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  color: var(--ctp-peach);
+  font-weight: 500;
+}
+
+.tt-gift-icon-inline {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.tt-badge-role {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.tt-badge-role.tt-badge-mod {
+  background: var(--ctp-sapphire);
+  color: var(--ctp-base);
+}
+
+.tt-badge-role.tt-badge-sub {
+  background: var(--ctp-mauve);
+  color: var(--ctp-base);
+}
+
+.tt-badge-role.tt-badge-friend {
+  background: var(--ctp-teal);
+  color: var(--ctp-base);
+}
+
+.tt-badge-role.tt-badge-follower {
+  background: var(--ctp-surface-2);
+  color: var(--ctp-text);
+}
+
+.tt-badge-role.tt-badge-gifter {
+  background: var(--ctp-yellow);
+  color: var(--ctp-base);
+}
+
+.tt-badge-role.tt-badge-gift {
+  background: var(--ctp-peach);
+  color: var(--ctp-base);
+}
+
+/* Gift Item */
+.tt-gift-item {
+  display: flex;
+  flex-direction: row;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--ctp-surface-0);
+  border: 1px solid rgba(245, 169, 127, 0.2);
+  transition: background-color 0.15s ease;
+}
+
+.tt-gift-item:hover {
+  background-color: var(--ctp-surface-1);
+}
+
+.tt-gift-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tt-gift-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tt-gift-content {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.15rem;
+  font-size: 13px;
+}
+
+.tt-gift-desc {
+  color: var(--ctp-subtext-1);
+}
+
+.tt-gift-desc strong {
+  color: var(--ctp-peach);
+  font-weight: 600;
+}
+
+.tt-gift-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
+}
+
+.tt-gift-emoji {
+  font-size: 1.25rem;
+}
+
+.tt-gift-repeat {
+  background: var(--ctp-peach);
+  color: var(--ctp-base);
+  font-weight: 800;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.tt-gift-diamonds {
+  background: rgba(183, 189, 248, 0.18);
+  color: var(--ctp-lavender);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+/* ==========================================================================
+   Spotify Controller (#spotify-controller)
+   ========================================================================== */
+.spt-login-card {
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spt-login-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  max-width: 26rem;
+}
+
+.spt-brand-icon {
+  font-size: 2.5rem;
+}
+
+.spt-login-info h3 {
+  margin: 0;
+  font-size: 17px;
+  color: var(--ctp-text);
+}
+
+.spt-login-info p {
+  margin: 0.25rem 0 0 0;
+  font-size: 12px;
+  color: var(--ctp-subtext-0);
+  line-height: 1.45;
+}
+
+.spt-login-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.spt-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--ctp-green);
+  color: var(--ctp-base);
+  border: 0;
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(166, 218, 149, 0.3);
+  width: 100%;
+  max-width: 18rem;
+}
+
+.spt-btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.spt-btn-secondary {
+  background: transparent;
+  color: var(--ctp-subtext-1);
+  border: 1px solid var(--ctp-surface-2);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.spt-btn-secondary:hover {
+  background-color: var(--ctp-surface-1);
+  color: var(--ctp-text);
+}
+
+/* Spotify Connected Dashboard */
+#spt-dash.isLogin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  width: 100%;
+}
+
+.spt-button-controller {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+/* Now Playing Card */
+#spt-player-status {
+  background-color: var(--ctp-surface-0);
+  border: 1px solid var(--ctp-surface-1);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#spt-player-status.idle {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.spt-idle-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.spt-idle-box .idle-icon {
+  font-size: 2rem;
+}
+
+.spt-idle-box .idle-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ctp-text);
+}
+
+.spt-idle-box .idle-desc {
+  font-size: 12px;
+  color: var(--ctp-overlay-1);
+}
+
+#current-play {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+#cover-img {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  background-color: var(--ctp-surface-1);
+  flex-shrink: 0;
+}
+
+#current-play-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+#song-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ctp-text);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#artist-name {
+  font-size: 13px;
+  color: var(--ctp-subtext-0);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spt-divider {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--ctp-surface-1);
+  margin: 0;
+}
+
+#device {
+  font-size: 12px;
+  color: var(--ctp-subtext-1);
+}
+
+#current-player {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#player-state {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.state-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-2);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.chip-label {
+  color: var(--ctp-subtext-0);
+}
+
+.chip-val {
+  font-weight: 700;
+  color: var(--ctp-text);
+}
+
+.spt-refresh-btn {
+  background-color: var(--ctp-surface-1);
+  color: var(--ctp-text);
+  border: 1px solid var(--ctp-surface-2);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.spt-refresh-btn:hover {
+  background-color: var(--ctp-surface-2);
+}
+
+/* Playback Control Buttons */
+.player-controller,
+.volume-controller,
+.state-controller {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.spt-ctrl-btn,
+.spt-vol-btn,
+.spt-state-btn {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.spt-ctrl-btn {
+  background-color: var(--ctp-surface-1);
+  color: var(--ctp-text);
+}
+
+.spt-ctrl-btn:hover {
+  background-color: var(--ctp-surface-2);
+}
+
+.spt-play-btn {
+  background-color: var(--ctp-green);
+  color: var(--ctp-base);
+  font-weight: 800;
+}
+
+.spt-play-btn:hover {
+  opacity: 0.92;
+  background-color: var(--ctp-green);
+}
+
+.spt-vol-btn {
+  background-color: var(--ctp-surface-1);
+  color: var(--ctp-text);
+}
+
+.spt-vol-btn:hover {
+  background-color: var(--ctp-surface-2);
+}
+
+.spt-state-btn.reauth {
+  background-color: var(--ctp-surface-1);
+  color: var(--ctp-text);
+  font-size: 12px;
+}
+
+.spt-state-btn.logout {
+  background-color: rgba(237, 135, 150, 0.15);
+  color: var(--ctp-red);
+  border: 1px solid rgba(237, 135, 150, 0.35);
+  font-size: 12px;
+}
+
+.spt-state-btn.logout:hover {
+  background-color: var(--ctp-red);
+  color: var(--ctp-base);
+}
+
+/* Song Search Form */
+.spt-search-form {
+  display: flex;
+  width: 100%;
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input-group:focus-within {
+  border-color: var(--ctp-sapphire);
+  box-shadow: 0 0 0 2px rgba(125, 196, 228, 0.2);
+}
+
+.search-icon {
+  padding: 0 0.6rem;
+  color: var(--ctp-overlay-1);
+  font-size: 13px;
+  user-select: none;
+}
+
+.search-input-group input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.5rem 0.55rem 0;
+  background: transparent;
+  border: 0;
+  color: var(--ctp-text);
+  font-size: 13px;
+  outline: none;
+}
+
+.spt-search-btn {
+  background-color: var(--ctp-sapphire);
+  color: var(--ctp-base);
+  border: 0;
+  font-weight: 800;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.spt-search-btn:hover {
+  opacity: 0.9;
+}
+
+/* Queue Panel */
+.spt-queue-controller {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ctp-surface-0);
+  border: 1px solid var(--ctp-surface-1);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.spt-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--ctp-surface-1);
+  border-bottom: 1px solid var(--ctp-surface-2);
+}
+
+.spt-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ctp-text);
+}
+
+.spt-badge {
+  background-color: var(--ctp-crust);
+  color: var(--ctp-subtext-1);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+#pull-queue {
+  background-color: var(--ctp-surface-2);
+  color: var(--ctp-text);
+  border: 0;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#pull-queue:hover {
+  background-color: var(--ctp-overlay-0);
+}
+
+#spt-queue {
+  height: 24rem;
+  max-height: 28rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background-color: var(--ctp-crust);
+}
+
+.queue-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--ctp-surface-0);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background-color 0.15s ease;
+}
+
+.queue-item:hover {
+  background-color: var(--ctp-surface-1);
+}
+
+.queue-index {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ctp-overlay-1);
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.queue-art {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: var(--ctp-surface-1);
+}
+
+.track-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.track-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ctp-text);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  font-size: 11px;
+  color: var(--ctp-subtext-0);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spt-empty-state {
+  margin: auto;
+  text-align: center;
+  color: var(--ctp-subtext-0);
+  padding: 2rem 1rem;
+}
+
+.spt-empty-state p {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ctp-text);
+}
+
+.spt-empty-state span {
+  font-size: 12px;
+  color: var(--ctp-overlay-1);
+}
+
+/* ==========================================================================
+   TTS Controller (#tts-controller)
+   ========================================================================== */
+.tts-placeholder-card {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.tts-placeholder-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-1);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ctp-subtext-1);
+  align-self: flex-start;
+}
+
+.tts-placeholder-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ctp-subtext-0);
+  line-height: 1.5;
+  max-width: 48rem;
+}
+
+.tts-metrics-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.tts-metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface-1);
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  min-width: 8rem;
+}
+
+.metric-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--ctp-overlay-1);
+  letter-spacing: 0.5px;
+}
+
+.metric-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ctp-text);
+}
+
+/* ==========================================================================
+   Console Log Controller (#log-controller)
+   ========================================================================== */
+.console-wrapper {
+  background-color: var(--ctp-crust);
+  overflow: hidden;
+}
+
+.console-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.85rem;
+  background-color: var(--ctp-surface-0);
+  border-bottom: 1px solid var(--ctp-surface-1);
+}
+
+.console-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.console-dots .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.console-dots .dot.red {
+  background-color: var(--ctp-red);
+}
+
+.console-dots .dot.yellow {
+  background-color: var(--ctp-yellow);
+}
+
+.console-dots .dot.green {
+  background-color: var(--ctp-green);
+}
+
+.console-session-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: var(--ctp-overlay-2);
+}
+
+.console-clear-btn {
+  background-color: var(--ctp-surface-1);
+  color: var(--ctp-subtext-1);
+  border: 0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.console-clear-btn:hover {
+  background-color: var(--ctp-surface-2);
+  color: var(--ctp-text);
+}
+
+#log-box {
+  width: 100%;
+  height: 18rem;
+  max-height: 22rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  background-color: var(--ctp-crust);
+}
+
+.log-empty-state {
+  margin: auto;
+  color: var(--ctp-overlay-1);
+  font-size: 12px;
+  font-style: italic;
+  padding: 1rem;
+}
+
+.logData {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  line-height: 1.4;
+}
+
+.logData:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.logData .date {
+  color: var(--ctp-overlay-1);
+  font-size: 11px;
+  min-width: 5.5rem;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.log-tag {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+  letter-spacing: 0.4px;
+  flex-shrink: 0;
+}
+
+.log-tag.tag-error {
+  background-color: rgba(237, 135, 150, 0.2);
+  color: var(--ctp-red);
+}
+
+.log-tag.tag-success {
+  background-color: rgba(166, 218, 149, 0.2);
+  color: var(--ctp-green);
+}
+
+.log-tag.tag-info {
+  background-color: rgba(125, 196, 228, 0.2);
+  color: var(--ctp-sapphire);
+}
+
+.logData .data {
+  flex: 1;
+  min-width: 0;
+  color: var(--ctp-text);
+  word-break: break-all;
+  margin: 0;
+}
+
+.logData .data.error {
+  color: var(--ctp-red);
+}
+
+.logData .data.success {
+  color: var(--ctp-green);
+}
+
+/* ==========================================================================
+   Utilities & Responsive Breakpoints
+   ========================================================================== */
 .hidden {
   display: none !important;
 }
 
-@media only screen and (max-width: 800px) {
-  #tt-dash,
-  #spt-dash {
-    flex-direction: column !important;
+@media only screen and (max-width: 960px) {
+  .main-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
   }
 
-  #tt-chat-container,
-  #tt-gift-container,
-  .spt-button-controller,
-  .spt-queue-controller {
-    width: 100% !important;
+  #status {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--ctp-surface-0);
+  }
+
+  .status-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0.75rem;
+  }
+
+  .status-tile {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  #controller {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .controller-container {
+    padding: 1rem;
+  }
+
+  #tt-dash,
+  #spt-dash.isLogin {
+    grid-template-columns: 1fr !important;
   }
 }

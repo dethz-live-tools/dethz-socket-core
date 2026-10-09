@@ -2,6 +2,11 @@
 var ws;
 
 var socketConnector = (ip) => {
+  const ipEl = document.querySelector("#socket-target-ip");
+  if (ipEl) {
+    ipEl.innerText = ip;
+  }
+
   ws = new WebSocket(`ws://${ip}/ws`);
   window.ws = ws;
 

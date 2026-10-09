@@ -130,12 +130,12 @@ var spotifyPlayerRenderer = (data) => {
     const currentStatus = document.querySelector("#spt-player-status");
     if (!currentStatus || !currentStatus.classList.contains("idle")) {
       playerElement.innerHTML = `<div id="spt-player-status" class="idle">
-        <div style="display:flex;flex-direction:column;align-items:center;padding:1.5rem 0.5rem;color:var(--ctp-subtext-0);text-align:center;gap:0.5rem;">
-          <span style="font-size:2rem;">🎵</span>
-          <p style="margin:0;font-weight:600;font-size:14px;color:var(--ctp-text);">No Active Playback</p>
-          <span style="font-size:12px;color:var(--ctp-overlay-1);">Play a song on any Spotify app or Connect device</span>
+        <div class="spt-idle-box">
+          <span class="idle-icon">🎵</span>
+          <p class="idle-title">No Active Playback</p>
+          <span class="idle-desc">Play a track on any Spotify app or Connect device</span>
         </div>
-        <button id="spt-refresh-player" style="margin-top:0.5rem;width:100%;">Refresh Player</button>
+        <button id="spt-refresh-player" class="spt-refresh-btn" type="button">🔄 Refresh Player</button>
       </div>`;
 
       const refreshBtn = document.querySelector("#spt-refresh-player");
@@ -212,7 +212,7 @@ var spotifyPlayerRenderer = (data) => {
 
     const playerStateEl = document.querySelector("#player-state");
     if (playerStateEl) {
-      const stateStr = `<p>shuffle: ${shuffleState ? "on" : "off"}</p><p>repeat: ${repeatState}</p><p>volume: ${volumePercent}%</p>`;
+      const stateStr = `<div class="state-chip"><span class="chip-label">Shuffle</span> <span class="chip-val">${shuffleState ? "On" : "Off"}</span></div><div class="state-chip"><span class="chip-label">Repeat</span> <span class="chip-val">${repeatState}</span></div><div class="state-chip"><span class="chip-label">Volume</span> <span class="chip-val">${volumePercent}%</span></div>`;
       if (playerStateEl.innerHTML !== stateStr) {
         playerStateEl.innerHTML = stateStr;
       }
@@ -223,12 +223,12 @@ var spotifyPlayerRenderer = (data) => {
   <div id="current-play">
     <img src="${albumArt}" alt="cover-img" id="cover-img" data-src="${albumArt}">
     <div id="current-play-text">
-      <div id="song-name">${songName}</div>
-      <div id="artist-name">${artists}</div>
+      <div id="song-name" title="${songName}">${songName}</div>
+      <div id="artist-name" title="${artists}">${artists}</div>
     </div>
   </div>
   
-  <hr>
+  <hr class="spt-divider">
 
   <div id="device">
     <p id="current-player">
@@ -236,15 +236,15 @@ var spotifyPlayerRenderer = (data) => {
     </p>
   </div>
 
-  <hr>
+  <hr class="spt-divider">
  
   <div id="player-state">
-    <p>shuffle: ${shuffleState ? "on" : "off"}</p>
-    <p>repeat: ${repeatState}</p>
-    <p>volume: ${volumePercent}%</p>
+    <div class="state-chip"><span class="chip-label">Shuffle</span> <span class="chip-val">${shuffleState ? "On" : "Off"}</span></div>
+    <div class="state-chip"><span class="chip-label">Repeat</span> <span class="chip-val">${repeatState}</span></div>
+    <div class="state-chip"><span class="chip-label">Volume</span> <span class="chip-val">${volumePercent}%</span></div>
   </div>
 
-  <button id="spt-refresh-player" type="button">
+  <button id="spt-refresh-player" class="spt-refresh-btn" type="button">
     🔄 Refresh Player
   </button>
 </div>`;
