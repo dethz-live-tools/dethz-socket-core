@@ -1,15 +1,8 @@
 // deno-lint-ignore-file
-var controllerFrame = () => {
-  if (!document.querySelector('link[href*="controller.css"]')) {
-    document.head.innerHTML += `<link rel="stylesheet" href="/core/src/css/controller.css">`;
-  }
+var renderSidebar = (activePage = "controller") => {
+  const controllerHref = "/controller";
 
-  const ttIsHidden = window.localStorage.getItem("tt-hide") === "true";
-  const ttsIsHidden = window.localStorage.getItem("tts-hide") !== "false";
-  const logIsHidden = window.localStorage.getItem("log-hide") === "true";
-
-  const element = `<div class="main-container">
-  <aside id="status">
+  return `<aside id="status">
     <div class="status-brand">
       <div class="brand-logo">
         <span class="brand-icon">⚡</span>
@@ -25,6 +18,26 @@ var controllerFrame = () => {
     </div>
 
     <div class="status-container">
+      <div class="sidebar-section-title">NAVIGATION</div>
+      <nav class="sidebar-nav">
+        <a href="${controllerHref}" class="sidebar-nav-item ${activePage === "controller" ? "active" : ""}">
+          <span class="nav-icon">🎮</span>
+          <span class="nav-text">Controller</span>
+        </a>
+        <a href="/config" class="sidebar-nav-item ${activePage === "config" ? "active" : ""}">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-text">Configuration</span>
+        </a>
+        <a href="/static" class="sidebar-nav-item ${activePage === "static" ? "active" : ""}">
+          <span class="nav-icon">🎨</span>
+          <span class="nav-text">Overlays</span>
+        </a>
+        <a href="/api/config" target="_blank" class="sidebar-nav-item">
+          <span class="nav-icon">🔌</span>
+          <span class="nav-text">API JSON</span>
+        </a>
+      </nav>
+
       <div class="sidebar-section-title">CONNECTIONS</div>
 
       <!-- Socket Status Tile -->
@@ -97,7 +110,30 @@ var controllerFrame = () => {
         <span>Core Engine Active</span>
       </div>
     </div>
-  </aside>
+  </aside>`;
+};
+
+var mountSidebar = (activePage = "controller", selector = "#sidebar-slot") => {
+  if (!document.querySelector('link[href*="controller.css"]')) {
+    document.head.innerHTML += `<link rel="stylesheet" href="/core/src/css/controller.css">`;
+  }
+  const target = document.querySelector(selector);
+  if (target) {
+    target.outerHTML = renderSidebar(activePage);
+  }
+};
+
+var controllerFrame = () => {
+  if (!document.querySelector('link[href*="controller.css"]')) {
+    document.head.innerHTML += `<link rel="stylesheet" href="/core/src/css/controller.css">`;
+  }
+
+  const ttIsHidden = window.localStorage.getItem("tt-hide") === "true";
+  const ttsIsHidden = window.localStorage.getItem("tts-hide") !== "false";
+  const logIsHidden = window.localStorage.getItem("log-hide") === "true";
+
+  const element = `<div class="main-container">
+  ${renderSidebar("controller")}
 
   <main id="controller">
     <div class="controller-container">
@@ -374,5 +410,7 @@ var spotifyFrame = (state) => {
   }
 };
 
+window.renderSidebar = renderSidebar;
+window.mountSidebar = mountSidebar;
 window.controllerFrame = controllerFrame;
 window.spotifyFrame = spotifyFrame;

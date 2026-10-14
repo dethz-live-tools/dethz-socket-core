@@ -137,6 +137,58 @@
   margin-bottom: 0.15rem;
 }
 
+/* Sidebar Navigation Menu */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--radius-md);
+  color: var(--ctp-subtext-0);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--ctp-surface-1);
+  background-color: var(--ctp-surface-0);
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.sidebar-nav-item:hover {
+  background-color: rgba(54, 58, 79, 0.85);
+  border-color: var(--ctp-surface-2);
+  color: var(--ctp-text);
+}
+
+.sidebar-nav-item.active {
+  background: linear-gradient(135deg, rgba(198, 160, 246, 0.15), rgba(125, 196, 228, 0.15));
+  border-color: var(--ctp-mauve);
+  color: var(--ctp-mauve);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(198, 160, 246, 0.15);
+}
+
+.sidebar-nav-item .nav-icon {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.sidebar-nav-item .nav-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Individual Status Card */
 .status-tile {
   background-color: var(--ctp-surface-0);
@@ -288,7 +340,8 @@
 /* ==========================================================================
    Main Controller Content Area (#controller)
    ========================================================================== */
-#controller {
+#controller,
+.config-main {
   flex: 1;
   min-width: 0;
   height: 100dvh;
@@ -1750,9 +1803,21 @@
     min-width: 140px;
   }
 
-  #controller {
+  #controller,
+  .config-main {
     height: auto;
     overflow-y: visible;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .sidebar-nav-item {
+    flex: 1;
+    min-width: 120px;
   }
 
   .controller-container {

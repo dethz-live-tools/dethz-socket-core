@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration Changer | Stream Overlay Socket</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.24/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="/core/src/css/main.css">
+  <link rel="stylesheet" href="/core/src/css/controller.css">
+  <link rel="stylesheet" href="/core/src/css/config.css">
+</head>
+
+<body>
+  <div class="main-container">
+    <div id="sidebar-slot"></div>
+
+    <main id="config-content" class="config-main">
+      <div class="container">
+        <header class="config-header">
+          <div class="title-group">
+            <h1>Configuration Changer</h1>
+            <p>Edit global application settings and Spotify credentials</p>
+          </div>
+        </header>
+
+        <div>
+          <span class="badge" id="configPathBadge">File: loading...</span>
+        </div>
+
+        <div class="tabs">
+          <button type="button" class="tab-btn active" id="tabFormBtn">Form View</button>
+          <button type="button" class="tab-btn" id="tabJsonBtn">Raw JSON</button>
+        </div>
+
+        <div id="toast" class="toast"></div>
+
+        <!-- FORM VIEW -->
+        <form id="configForm" method="POST" action="/config" class="card">
+          <input type="hidden" name="expansion_json" id="expansion_json">
+
+          <div class="form-group">
+            <label for="TEST_VALUE">
+              TEST_VALUE
+              <span class="desc">General test/build verification string</span>
+            </label>
+            <input type="text" id="TEST_VALUE" name="TEST_VALUE" required>
+          </div>
+
+          <div class="form-group">
+            <label for="SPOTIFY_CLIENT_ID">
+              SPOTIFY_CLIENT_ID
+              <span class="desc">Spotify Developer Dashboard Client ID</span>
+            </label>
+            <input type="text" id="SPOTIFY_CLIENT_ID" name="SPOTIFY_CLIENT_ID" placeholder="e.g. 8f9c02c9...">
+          </div>
+
+          <div class="form-group">
+            <label for="SPOTIFY_CLIENT_SECRET">
+              SPOTIFY_CLIENT_SECRET
+              <span class="desc">Spotify App Secret key</span>
+            </label>
+            <div class="input-wrapper">
+              <input type="password" id="SPOTIFY_CLIENT_SECRET" name="SPOTIFY_CLIENT_SECRET"
+                placeholder="e.g. 2ec510f6...">
+              <button type="button" class="toggle-pwd" id="toggleSecretBtn">Show</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="SPOTIFY_REDIRECT_URI">
+              SPOTIFY_REDIRECT_URI
+              <span class="desc">OAuth callback URI</span>
+            </label>
+            <input type="text" id="SPOTIFY_REDIRECT_URI" name="SPOTIFY_REDIRECT_URI"
+              placeholder="http://127.0.0.1:3000/spotify/callback/">
+          </div>
+
+          <!-- MODULE EXPANSIONS SECTION -->
+          <div class="form-group" style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <label style="font-size: 1.05rem; color: var(--ctp-peach); margin-bottom: 0;">
+                Module Expansions Configuration
+                <span class="desc">Custom variables stored under "expansion" key for folders in modules/</span>
+              </label>
+              <button type="button" class="btn btn-secondary" id="addExpansionBtn">+ Add Expansion</button>
+            </div>
+
+            <div id="expansionCardsContainer"></div>
+          </div>
+
+          <!-- CUSTOM SETTINGS SECTION -->
+          <div class="form-group" style="margin-top: 1rem;">
+            <label>
+              Custom Settings
+              <span class="desc">Additional root keys stored in config.json</span>
+            </label>
+            <table class="custom-keys-table" id="customKeysTable">
+              <thead>
+                <tr>
+                  <th style="width: 40%;">Key</th>
+                  <th style="width: 50%;">Value</th>
+                  <th style="width: 10%;"></th>
+                </tr>
+              </thead>
+              <tbody id="customKeysBody"></tbody>
+            </table>
+            <div style="margin-top: 0.5rem;">
+              <button type="button" class="btn btn-secondary" id="addCustomKeyBtn">+ Add Setting</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn btn-primary" id="saveBtn">Save Configuration</button>
+          </div>
+        </form>
+
+        <!-- RAW JSON VIEW -->
+        <div id="jsonView" class="card" style="display: none;">
+          <div class="form-group">
+            <label for="rawJson">
+              config.json
+              <span class="desc">Direct JSON editing</span>
+            </label>
+            <textarea id="rawJson" spellcheck="false"></textarea>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" id="saveRawJsonBtn">Save JSON</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Libs -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.24/dist/sweetalert2.all.min.js"></script>
+
+  <!-- Components & Updater Scripts -->
+  <script src="/core/src/js/renderer/controller/frame.js"></script>
+  <script src="/core/src/js/updater.js"></script>
+
+  <!-- Config Dashboard Logic -->
+  <script src="/core/src/js/config/index.js"></script>
+</body>
+
+</html>

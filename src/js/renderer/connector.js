@@ -1,8 +1,8 @@
 // deno-lint-ignore-file
 var connector = (ip) => {
-  const cleanIp = ip.trim().replace(/^ws:\/\//, "").replace(/^http:\/\//, "");
-  const encode = btoa(cleanIp);
-  window.location.href = `${window.location.origin}/controller/?id=${encode}`;
+  const cleanIp = ip.trim().replace(/^wss?:\/\//, "").replace(/^https?:\/\//, "");
+  window.localStorage.setItem("last-ws-host", cleanIp);
+  window.controllerRenderer(cleanIp);
 };
 
 var connectRenderer = () => {
@@ -48,6 +48,11 @@ var connectRenderer = () => {
       <div class="connector-tip">
         <span class="tip-icon">ℹ️</span>
         <span>Ensure your overlay server is active. The controller will automatically negotiate API tokens and event listeners upon connecting.</span>
+      </div>
+      <div class="connector-links" style="margin-top: 0.75rem; display: flex; gap: 0.75rem; justify-content: center; align-items: center;">
+        <a href="/config" style="color: var(--ctp-mauve); font-size: 12px; text-decoration: none; font-weight: 600;">⚙️ Configuration</a>
+        <span style="color: var(--ctp-surface-2); font-size: 11px;">•</span>
+        <a href="/static" style="color: var(--ctp-sapphire); font-size: 12px; text-decoration: none; font-weight: 600;">🎨 Overlays</a>
       </div>
     </div>
   </div>

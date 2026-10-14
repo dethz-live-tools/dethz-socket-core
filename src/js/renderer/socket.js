@@ -76,9 +76,7 @@ var socketOffline = () => {
     const recBtn = document.querySelector("#reconnect");
     if (recBtn) {
       recBtn.addEventListener("click", () => {
-        if (typeof id !== "undefined" && id) {
-          socketConnector(atob(id));
-        }
+        socketConnector(window.location.host || "localhost:3000");
       });
     }
 

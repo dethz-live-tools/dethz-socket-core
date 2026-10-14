@@ -47,6 +47,10 @@ A lightweight, modern web client and dashboard controller for managing live stre
 
 ```
 core/
+├── config/
+│   ├── index.html             # Application & extension config dashboard
+│   ├── config.js              # Client-side configuration manager
+│   └── config.css             # Config dashboard styles
 ├── controller/
 │   └── index.html             # Main dashboard controller view
 ├── spotify/

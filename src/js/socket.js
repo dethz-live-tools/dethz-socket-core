@@ -2,12 +2,15 @@
 var ws;
 
 var socketConnector = (ip) => {
+  const targetHost = ip || window.location.host || "localhost:3000";
   const ipEl = document.querySelector("#socket-target-ip");
   if (ipEl) {
-    ipEl.innerText = ip;
+    ipEl.innerText = targetHost;
   }
 
-  ws = new WebSocket(`ws://${ip}/ws`);
+  const cleanHost = targetHost.replace(/^wss?:\/\//, "");
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+  ws = new WebSocket(`${protocol}//${cleanHost}/ws`);
   window.ws = ws;
 
   ws.onopen = () => {
@@ -57,6 +60,7 @@ var socketConnector = (ip) => {
 };
 
 var controllerRenderer = (ip) => {
+  const targetHost = ip || window.location.host || "localhost:3000";
   controllerFrame();
   spotifyInit();
   tiktokInitialElement();
@@ -65,7 +69,7 @@ var controllerRenderer = (ip) => {
     initCoreUpdater();
   }
 
-  socketConnector(ip);
+  socketConnector(targetHost);
 };
 
 window.controllerRenderer = controllerRenderer;
