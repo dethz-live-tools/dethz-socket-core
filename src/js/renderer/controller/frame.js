@@ -1,6 +1,14 @@
 // deno-lint-ignore-file
-var renderSidebar = (activePage = "controller") => {
+var renderSidebar = (activePage = "controller", activeModule = null, activeView = null) => {
   const controllerHref = "/controller";
+
+  let currentView = activeView;
+  if (!currentView && typeof window !== "undefined") {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      currentView = p.get("view") || (p.get("module") ? "expansions" : (activePage === "config" ? "all" : null));
+    } catch {}
+  }
 
   return `<aside id="status">
     <div class="status-brand">
@@ -24,9 +32,13 @@ var renderSidebar = (activePage = "controller") => {
           <span class="nav-icon">🎮</span>
           <span class="nav-text">Controller</span>
         </a>
-        <a href="/config" class="sidebar-nav-item ${activePage === "config" ? "active" : ""}">
-          <span class="nav-icon">⚙️</span>
-          <span class="nav-text">Configuration</span>
+        <a href="/config" class="sidebar-nav-item ${activePage === "config" && (!currentView || currentView === "core") && !activeModule ? "active" : ""}">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-text">Core Config</span>
+        </a>
+        <a href="/config?view=expansions" class="sidebar-nav-item ${(activePage === "config" && currentView === "expansions" && !activeModule) || activePage === "expansions" ? "active" : ""}">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-text">Expansions</span>
         </a>
         <a href="/static" class="sidebar-nav-item ${activePage === "static" ? "active" : ""}">
           <span class="nav-icon">🎨</span>
@@ -36,6 +48,11 @@ var renderSidebar = (activePage = "controller") => {
           <span class="nav-icon">🔌</span>
           <span class="nav-text">API JSON</span>
         </a>
+      </nav>
+
+      <div class="sidebar-section-title">EXPANSIONS / MODULES</div>
+      <nav class="sidebar-nav" id="sidebar-expansions-list">
+        <div class="sidebar-nav-empty" style="font-size: 11px; color: var(--ctp-overlay-0); padding: 0.25rem 0.5rem;">Loading modules...</div>
       </nav>
 
       <div class="sidebar-section-title">CONNECTIONS</div>
@@ -113,13 +130,46 @@ var renderSidebar = (activePage = "controller") => {
   </aside>`;
 };
 
-var mountSidebar = (activePage = "controller", selector = "#sidebar-slot") => {
+var loadSidebarExpansions = async (activeModule = null) => {
+  const container = document.getElementById("sidebar-expansions-list");
+  if (!container) return;
+
+  try {
+    const res = await fetch("/api/config");
+    const data = await res.json();
+    const modules = data.modules || [];
+
+    if (modules.length === 0) {
+      container.innerHTML = `<span style="font-size: 11px; color: var(--ctp-overlay-0); padding: 0.25rem 0.5rem;">No expansion modules</span>`;
+      return;
+    }
+
+    container.innerHTML = modules
+      .map((m) => {
+        const modKey = m.folderName || m.name;
+        const isActive = activeModule === modKey;
+        const displayName = m.name || m.folderName;
+        const versionStr = m.version ? `v${m.version}` : "";
+        return `<a href="/config?module=${encodeURIComponent(modKey)}" class="sidebar-nav-item ${isActive ? "active" : ""}" title="Configure ${displayName}">
+          <span class="nav-icon">📦</span>
+          <span class="nav-text">${displayName}</span>
+          ${versionStr ? `<span class="sidebar-badge">${versionStr}</span>` : ""}
+        </a>`;
+      })
+      .join("");
+  } catch {
+    container.innerHTML = `<span style="font-size: 11px; color: var(--ctp-overlay-0); padding: 0.25rem 0.5rem;">Modules unavailable</span>`;
+  }
+};
+
+var mountSidebar = (activePage = "controller", selector = "#sidebar-slot", activeModule = null, activeView = null) => {
   if (!document.querySelector('link[href*="controller.css"]')) {
     document.head.innerHTML += `<link rel="stylesheet" href="/core/src/css/controller.css">`;
   }
   const target = document.querySelector(selector);
   if (target) {
-    target.outerHTML = renderSidebar(activePage);
+    target.outerHTML = renderSidebar(activePage, activeModule, activeView);
+    loadSidebarExpansions(activeModule);
   }
 };
 
@@ -412,5 +462,6 @@ var spotifyFrame = (state) => {
 
 window.renderSidebar = renderSidebar;
 window.mountSidebar = mountSidebar;
+window.loadSidebarExpansions = loadSidebarExpansions;
 window.controllerFrame = controllerFrame;
 window.spotifyFrame = spotifyFrame;

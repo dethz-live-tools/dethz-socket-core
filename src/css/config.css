@@ -249,3 +249,108 @@ textarea#rawJson {
   font-size: 0.82rem;
   color: var(--ctp-overlay-2);
 }
+
+/* Expansion Modules Menu Navigation */
+.expansion-nav-wrapper {
+  margin: 0.75rem 0 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.expansion-menu-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.35rem 0.45rem;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface-0);
+  border-radius: 0.75rem;
+}
+
+.expansion-menu-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--ctp-surface-1);
+  background: var(--ctp-surface-0);
+  color: var(--ctp-subtext-0);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.expansion-menu-item:hover {
+  background: var(--ctp-surface-1);
+  color: var(--ctp-text);
+  border-color: var(--ctp-surface-2);
+}
+
+.expansion-menu-item.active {
+  background: linear-gradient(135deg, rgba(245, 169, 127, 0.2), rgba(198, 160, 246, 0.15));
+  border-color: var(--ctp-peach);
+  color: var(--ctp-peach);
+  box-shadow: 0 2px 8px rgba(245, 169, 127, 0.2);
+}
+
+.expansion-menu-item .exp-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.expansion-menu-item .exp-count-badge {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--ctp-surface-2);
+  color: var(--ctp-subtext-1);
+}
+
+.card-action-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-save-module {
+  background: linear-gradient(135deg, var(--ctp-green), var(--ctp-teal));
+  color: var(--ctp-crust);
+  font-size: 0.82rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.45rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(166, 218, 149, 0.25);
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn-save-module:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.module-meta-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.2rem;
+}
+
+.module-meta-badge {
+  font-size: 0.78rem;
+  font-family: monospace;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface-1);
+  color: var(--ctp-subtext-0);
+}
+

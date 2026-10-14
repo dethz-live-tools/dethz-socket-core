@@ -1,6 +1,26 @@
 // ponytail: minimal vanilla DOM config controller
+let activeModule = "all";
+let discoveredModules = [];
+let currentView = "core";
+
+const initialParams = new URLSearchParams(window.location.search);
+if (initialParams.get("module")) {
+  activeModule = initialParams.get("module");
+}
+const initialView = initialParams.get("view");
+if (initialView === "expansions" || initialParams.get("module")) {
+  currentView = "modules";
+} else {
+  currentView = "core";
+}
+
 if (typeof mountSidebar === "function") {
-  mountSidebar("config", "#sidebar-slot");
+  mountSidebar(
+    "config",
+    "#sidebar-slot",
+    activeModule !== "all" ? activeModule : null,
+    currentView === "modules" ? "expansions" : "core",
+  );
 }
 if (typeof initCoreUpdater === "function") {
   initCoreUpdater();
@@ -18,6 +38,7 @@ function escapeHtml(str) {
 
 function showToast(msg, isError = false) {
   const toast = document.getElementById("toast");
+  if (!toast) return;
   toast.textContent = (isError ? "✗ " : "✓ ") + msg;
   toast.className = "toast show" + (isError ? " error" : "");
   setTimeout(() => {
@@ -38,22 +59,69 @@ function toggleSecretVisibility() {
 }
 
 function switchTab(tab) {
+  currentView = tab;
   const formCard = document.getElementById("configForm");
   const jsonCard = document.getElementById("jsonView");
-  const formBtn = document.getElementById("tabFormBtn");
+  const coreBtn = document.getElementById("tabCoreBtn");
+  const modulesBtn = document.getElementById("tabModulesBtn");
   const jsonBtn = document.getElementById("tabJsonBtn");
+  const globalSection = document.getElementById("globalSettingsSection");
+  const customSection = document.getElementById("customSettingsSection");
+  const expansionsSection = document.getElementById("expansionsSection");
+  const formActions = document.getElementById("formActions");
+  const saveBtn = document.getElementById("saveBtn");
 
-  if (tab === "form") {
-    formCard.style.display = "flex";
-    jsonCard.style.display = "none";
-    formBtn.classList.add("active");
-    jsonBtn.classList.remove("active");
+  // Reset active tabs
+  if (coreBtn) coreBtn.classList.remove("active");
+  if (modulesBtn) modulesBtn.classList.remove("active");
+  if (jsonBtn) jsonBtn.classList.remove("active");
+
+  if (tab === "core") {
+    if (formCard) formCard.style.display = "flex";
+    if (jsonCard) jsonCard.style.display = "none";
+    if (globalSection) globalSection.style.display = "block";
+    if (customSection) customSection.style.display = "block";
+    if (expansionsSection) expansionsSection.style.display = "none";
+    if (formActions) formActions.style.display = "flex";
+    if (saveBtn) saveBtn.textContent = "💾 Save Core Configuration";
+    if (coreBtn) coreBtn.classList.add("active");
+  } else if (tab === "modules") {
+    if (formCard) formCard.style.display = "flex";
+    if (jsonCard) jsonCard.style.display = "none";
+    if (globalSection) globalSection.style.display = "none";
+    if (customSection) customSection.style.display = "none";
+    if (expansionsSection) expansionsSection.style.display = "block";
+    if (formActions) formActions.style.display = "flex";
+    if (saveBtn) saveBtn.textContent = "💾 Save All Expansions";
+    if (modulesBtn) modulesBtn.classList.add("active");
   } else {
     syncFormToJson();
-    formCard.style.display = "none";
-    jsonCard.style.display = "flex";
-    jsonBtn.classList.add("active");
-    formBtn.classList.remove("active");
+    if (formCard) formCard.style.display = "none";
+    if (jsonCard) jsonCard.style.display = "flex";
+    if (jsonBtn) jsonBtn.classList.add("active");
+  }
+
+  // Sync URL view parameter
+  try {
+    const url = new URL(window.location.href);
+    if (tab === "core") {
+      url.searchParams.delete("view");
+    } else if (tab === "modules") {
+      url.searchParams.set("view", "expansions");
+    } else {
+      url.searchParams.set("view", tab);
+    }
+    window.history.replaceState({}, "", url.toString());
+  } catch {}
+
+  // Update sidebar active item
+  const sidebarSlot = document.querySelector("#status");
+  if (sidebarSlot && typeof renderSidebar === "function") {
+    const viewArg = tab === "modules" ? "expansions" : "core";
+    sidebarSlot.outerHTML = renderSidebar("config", activeModule !== "all" ? activeModule : null, viewArg);
+    if (typeof loadSidebarExpansions === "function") {
+      loadSidebarExpansions(activeModule !== "all" ? activeModule : null);
+    }
   }
 }
 
@@ -80,11 +148,187 @@ function addExpansionVarRow(tbody, key = "", val = "") {
   tbody.appendChild(tr);
 }
 
+function updateExpansionMenu() {
+  const menuBar = document.getElementById("expansionMenuBar");
+  if (!menuBar) return;
+
+  const cards = Array.from(document.querySelectorAll(".expansion-card"));
+  const countBadge = document.getElementById("moduleCountBadge");
+  if (countBadge) {
+    countBadge.textContent = String(cards.length);
+  }
+
+  menuBar.innerHTML = "";
+
+  const allBtn = document.createElement("button");
+  allBtn.type = "button";
+  allBtn.className = "expansion-menu-item" + (activeModule === "all" ? " active" : "");
+  allBtn.setAttribute("data-module", "all");
+  allBtn.innerHTML = `
+    <span class="exp-icon">📦</span>
+    <span>All Modules</span>
+    <span class="badge exp-count-badge">${cards.length}</span>
+  `;
+  allBtn.onclick = () => selectModule("all");
+  menuBar.appendChild(allBtn);
+
+  cards.forEach((card) => {
+    const fInput = card.querySelector(".expansion-folder-name");
+    const folder = fInput ? fInput.value.trim() : card.getAttribute("data-folder") || "";
+    if (!folder) return;
+
+    const meta = discoveredModules.find((m) => m.folderName === folder || m.name === folder);
+    const displayName = meta?.name || folder;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "expansion-menu-item" + (activeModule === folder ? " active" : "");
+    btn.setAttribute("data-module", folder);
+    btn.title = `Configure ${displayName}`;
+    btn.innerHTML = `
+      <span class="exp-icon">🧩</span>
+      <span>${escapeHtml(displayName)}</span>
+      ${meta?.version ? `<span class="badge exp-count-badge">v${escapeHtml(meta.version)}</span>` : ""}
+    `;
+    btn.onclick = () => selectModule(folder);
+    menuBar.appendChild(btn);
+  });
+}
+
+function selectModule(targetModule) {
+  activeModule = targetModule;
+
+  // Filter expansion cards
+  const cards = document.querySelectorAll(".expansion-card");
+  cards.forEach((card) => {
+    const fInput = card.querySelector(".expansion-folder-name");
+    const folder = fInput ? fInput.value.trim() : card.getAttribute("data-folder") || "";
+    if (activeModule === "all" || folder === activeModule) {
+      card.style.display = "flex";
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  // Highlight menu bar button
+  const menuButtons = document.querySelectorAll(".expansion-menu-item");
+  menuButtons.forEach((btn) => {
+    const mod = btn.getAttribute("data-module");
+    if (mod === activeModule) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+
+  // Update URL without page reload
+  try {
+    const url = new URL(window.location.href);
+    if (activeModule === "all") {
+      url.searchParams.delete("module");
+    } else {
+      url.searchParams.set("module", activeModule);
+    }
+    window.history.replaceState({}, "", url.toString());
+  } catch {}
+
+  // Update sidebar if available
+  if (typeof loadSidebarExpansions === "function") {
+    loadSidebarExpansions(activeModule !== "all" ? activeModule : null);
+  }
+}
+
+function collectCoreData() {
+  const core = {
+    TEST_VALUE: document.getElementById("TEST_VALUE").value,
+    SPOTIFY_CLIENT_ID: document.getElementById("SPOTIFY_CLIENT_ID").value,
+    SPOTIFY_CLIENT_SECRET: document.getElementById("SPOTIFY_CLIENT_SECRET").value,
+    SPOTIFY_REDIRECT_URI: document.getElementById("SPOTIFY_REDIRECT_URI").value,
+  };
+
+  const rows = document.querySelectorAll("#customKeysBody tr");
+  rows.forEach((row) => {
+    const keyInput = row.querySelector(".custom-key");
+    const valInput = row.querySelector(".custom-val");
+    if (keyInput && valInput && keyInput.value.trim()) {
+      let val = valInput.value;
+      try {
+        val = JSON.parse(val);
+      } catch {}
+      core[keyInput.value.trim()] = val;
+    }
+  });
+
+  return core;
+}
+
+async function saveCoreConfig() {
+  const coreData = collectCoreData();
+  try {
+    const res = await fetch("/api/config/core", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(coreData),
+    });
+    const data = await res.json();
+    if (data.status === 1) {
+      showToast("Core configuration saved successfully!");
+      syncFormToJson();
+    } else {
+      showToast(data.message || "Failed to save core configuration", true);
+    }
+  } catch (err) {
+    showToast("Error saving core: " + err.message, true);
+  }
+}
+
+async function saveModuleConfig(card) {
+  if (!card) return;
+  const folderInput = card.querySelector(".expansion-folder-name");
+  const folder = folderInput ? folderInput.value.trim() : card.getAttribute("data-folder") || "";
+
+  if (!folder) {
+    showToast("Please enter a module folder name first", true);
+    return;
+  }
+
+  const modVars = {};
+  const varRows = card.querySelectorAll(".expansion-var-row");
+  varRows.forEach((vRow) => {
+    const kInput = vRow.querySelector(".exp-var-key");
+    const vInput = vRow.querySelector(".exp-var-val");
+    if (kInput && vInput && kInput.value.trim()) {
+      let val = vInput.value;
+      try {
+        val = JSON.parse(val);
+      } catch {}
+      modVars[kInput.value.trim()] = val;
+    }
+  });
+
+  try {
+    const res = await fetch(`/api/config/expansion/${encodeURIComponent(folder)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(modVars),
+    });
+    const data = await res.json();
+    if (data.status === 1) {
+      showToast(`Module "${folder}" configuration saved successfully!`);
+      syncFormToJson();
+    } else {
+      showToast(data.message || `Failed to save ${folder} configuration`, true);
+    }
+  } catch (err) {
+    showToast("Error saving module config: " + err.message, true);
+  }
+}
+
 function createExpansionCard(folder, meta = null, vars = {}) {
   const container = document.getElementById("expansionCardsContainer");
   const card = document.createElement("div");
   card.className = "expansion-card";
-  card.setAttribute("data-folder", folder);
+  card.setAttribute("data-folder", folder || "");
 
   const isCustom = !folder;
   const folderHeader = isCustom
@@ -101,6 +345,10 @@ function createExpansionCard(folder, meta = null, vars = {}) {
       ? `<div class="expansion-desc">Custom expansion module configuration</div>`
       : "";
 
+  const routeBadgeHtml = meta?.route || meta?.routePath
+    ? `<span class="module-meta-badge" style="color: var(--ctp-teal);">Route: ${escapeHtml(meta.route || meta.routePath)}</span>`
+    : "";
+
   card.innerHTML = `
     <div class="expansion-card-header">
       <div class="expansion-card-title">
@@ -109,9 +357,11 @@ function createExpansionCard(folder, meta = null, vars = {}) {
         </div>
         ${metaHtml}
         ${descHtml}
+        ${routeBadgeHtml ? `<div class="module-meta-badges">${routeBadgeHtml}</div>` : ""}
       </div>
-      <div>
-        <button type="button" class="btn btn-danger" onclick="this.closest('.expansion-card').remove()" title="Delete module configuration">✕ Remove</button>
+      <div class="card-action-group">
+        <button type="button" class="btn-save-module" title="Save this module's configuration">💾 Save Module</button>
+        <button type="button" class="btn btn-danger btn-remove-module" title="Delete module configuration">✕ Remove</button>
       </div>
     </div>
     <table class="custom-keys-table">
@@ -141,31 +391,39 @@ function createExpansionCard(folder, meta = null, vars = {}) {
 
   card.querySelector(".add-exp-var-btn").onclick = () =>
     addExpansionVarRow(tbody);
-  container.appendChild(card);
-}
 
-function collectFormData() {
-  const config = {
-    TEST_VALUE: document.getElementById("TEST_VALUE").value,
-    SPOTIFY_CLIENT_ID: document.getElementById("SPOTIFY_CLIENT_ID").value,
-    SPOTIFY_CLIENT_SECRET: document.getElementById("SPOTIFY_CLIENT_SECRET")
-      .value,
-    SPOTIFY_REDIRECT_URI: document.getElementById("SPOTIFY_REDIRECT_URI").value,
+  card.querySelector(".btn-save-module").onclick = () =>
+    saveModuleConfig(card);
+
+  card.querySelector(".btn-remove-module").onclick = () => {
+    card.remove();
+    updateExpansionMenu();
+    if (activeModule !== "all") {
+      selectModule("all");
+    }
   };
 
-  const rows = document.querySelectorAll("#customKeysBody tr");
-  rows.forEach((row) => {
-    const keyInput = row.querySelector(".custom-key");
-    const valInput = row.querySelector(".custom-val");
-    if (keyInput && valInput && keyInput.value.trim()) {
-      let val = valInput.value;
-      try {
-        val = JSON.parse(val);
-      } catch {}
-      config[keyInput.value.trim()] = val;
+  if (isCustom) {
+    const fInput = card.querySelector(".expansion-folder-name");
+    if (fInput) {
+      fInput.addEventListener("input", () => {
+        const val = fInput.value.trim();
+        card.setAttribute("data-folder", val);
+        updateExpansionMenu();
+      });
     }
-  });
+  }
 
+  // Filter display based on current activeModule
+  if (activeModule !== "all" && folder && folder !== activeModule) {
+    card.style.display = "none";
+  }
+
+  container.appendChild(card);
+  updateExpansionMenu();
+}
+
+function collectExpansionsData() {
   const expansion = {};
   const cards = document.querySelectorAll(".expansion-card");
   cards.forEach((card) => {
@@ -189,6 +447,12 @@ function collectFormData() {
 
     expansion[folderName] = modVars;
   });
+  return expansion;
+}
+
+function collectFormData() {
+  const config = collectCoreData();
+  const expansion = collectExpansionsData();
 
   config.expansion = expansion;
 
@@ -206,10 +470,20 @@ function syncFormToJson() {
 }
 
 async function loadConfig() {
-  // Check if redirected from form submission (?saved=true)
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get("saved") === "true") {
     showToast("Configuration saved successfully!");
+  }
+
+  const viewParam = urlParams.get("view");
+  if (viewParam === "expansions" || urlParams.get("module")) {
+    switchTab("modules");
+  } else {
+    switchTab("core");
+  }
+
+  if (urlParams.get("module")) {
+    activeModule = urlParams.get("module");
   }
 
   try {
@@ -220,6 +494,7 @@ async function loadConfig() {
       return;
     }
 
+    discoveredModules = data.modules || [];
     const cfg = data.config || {};
     document.getElementById("configPathBadge").textContent =
       `File: ${data.path || "config.json"}`;
@@ -249,12 +524,11 @@ async function loadConfig() {
     }
 
     // Render expansions
-    const discovered = data.modules || [];
-    const discoveredMap = new Map(discovered.map((d) => [d.folderName, d]));
+    const discoveredMap = new Map(discoveredModules.map((d) => [d.folderName, d]));
     const currentExpansions = cfg.expansion || {};
     const allFolderNames = Array.from(
       new Set([
-        ...discovered.map((d) => d.folderName),
+        ...discoveredModules.map((d) => d.folderName),
         ...Object.keys(currentExpansions),
       ]),
     );
@@ -269,6 +543,12 @@ async function loadConfig() {
       );
     }
 
+    updateExpansionMenu();
+
+    if (activeModule !== "all") {
+      selectModule(activeModule);
+    }
+
     document.getElementById("rawJson").value = JSON.stringify(cfg, null, 2);
   } catch (err) {
     showToast("Error loading config: " + err.message, true);
@@ -276,31 +556,56 @@ async function loadConfig() {
 }
 
 // Wire events
-document.getElementById("tabFormBtn").onclick = () => switchTab("form");
+const coreTabBtn = document.getElementById("tabCoreBtn");
+if (coreTabBtn) {
+  coreTabBtn.onclick = () => switchTab("core");
+}
+const modulesTabBtn = document.getElementById("tabModulesBtn");
+if (modulesTabBtn) {
+  modulesTabBtn.onclick = () => switchTab("modules");
+}
 document.getElementById("tabJsonBtn").onclick = () => switchTab("json");
+
+const saveCoreTopBtn = document.getElementById("saveCoreTopBtn");
+if (saveCoreTopBtn) {
+  saveCoreTopBtn.onclick = () => saveCoreConfig();
+}
+
 document.getElementById("toggleSecretBtn").onclick = toggleSecretVisibility;
 document.getElementById("addCustomKeyBtn").onclick = () => addCustomKeyRow();
-document.getElementById("addExpansionBtn").onclick = () =>
+document.getElementById("addExpansionBtn").onclick = () => {
   createExpansionCard("");
+  switchTab("modules");
+  selectModule("all");
+};
 
 document.getElementById("configForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const payload = collectFormData();
-  try {
-    const res = await fetch("/api/config", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json();
-    if (data.status === 1) {
-      showToast("Configuration saved successfully!");
-      syncFormToJson();
-    } else {
-      showToast(data.message || "Failed to save configuration", true);
+  if (currentView === "core") {
+    await saveCoreConfig();
+    return;
+  }
+
+  if (currentView === "modules") {
+    // Save all expansions
+    const expansions = collectExpansionsData();
+    try {
+      const res = await fetch("/api/config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expansion: expansions }),
+      });
+      const data = await res.json();
+      if (data.status === 1) {
+        showToast("Expansions saved successfully!");
+        syncFormToJson();
+      } else {
+        showToast(data.message || "Failed to save expansions", true);
+      }
+    } catch (err) {
+      showToast("Error saving: " + err.message, true);
     }
-  } catch (err) {
-    showToast("Error saving: " + err.message, true);
+    return;
   }
 });
 

@@ -29,7 +29,8 @@
         </div>
 
         <div class="tabs">
-          <button type="button" class="tab-btn active" id="tabFormBtn">Form View</button>
+          <button type="button" class="tab-btn active" id="tabCoreBtn">⚡ Core Config</button>
+          <button type="button" class="tab-btn" id="tabModulesBtn">🧩 Module Expansions</button>
           <button type="button" class="tab-btn" id="tabJsonBtn">Raw JSON</button>
         </div>
 
@@ -39,58 +40,83 @@
         <form id="configForm" method="POST" action="/config" class="card">
           <input type="hidden" name="expansion_json" id="expansion_json">
 
-          <div class="form-group">
-            <label for="TEST_VALUE">
-              TEST_VALUE
-              <span class="desc">General test/build verification string</span>
-            </label>
-            <input type="text" id="TEST_VALUE" name="TEST_VALUE" required>
-          </div>
+          <div id="globalSettingsSection">
+            <div class="expansion-header-row" style="margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--ctp-surface-0); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <label style="font-size: 1.05rem; color: var(--ctp-sapphire); margin-bottom: 0;">
+                ⚡ Core System Configuration
+                <span class="desc">Host application settings, Spotify credentials, and root keys</span>
+              </label>
+              <div class="card-action-group">
+                <button type="button" class="btn btn-primary" id="saveCoreTopBtn" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">💾 Save Core</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="TEST_VALUE">
+                TEST_VALUE
+                <span class="desc">General test/build verification string</span>
+              </label>
+              <input type="text" id="TEST_VALUE" name="TEST_VALUE" required>
+            </div>
 
-          <div class="form-group">
-            <label for="SPOTIFY_CLIENT_ID">
-              SPOTIFY_CLIENT_ID
-              <span class="desc">Spotify Developer Dashboard Client ID</span>
-            </label>
-            <input type="text" id="SPOTIFY_CLIENT_ID" name="SPOTIFY_CLIENT_ID" placeholder="e.g. 8f9c02c9...">
-          </div>
+            <div class="form-group">
+              <label for="SPOTIFY_CLIENT_ID">
+                SPOTIFY_CLIENT_ID
+                <span class="desc">Spotify Developer Dashboard Client ID</span>
+              </label>
+              <input type="text" id="SPOTIFY_CLIENT_ID" name="SPOTIFY_CLIENT_ID" placeholder="e.g. 8f9c02c9...">
+            </div>
 
-          <div class="form-group">
-            <label for="SPOTIFY_CLIENT_SECRET">
-              SPOTIFY_CLIENT_SECRET
-              <span class="desc">Spotify App Secret key</span>
-            </label>
-            <div class="input-wrapper">
-              <input type="password" id="SPOTIFY_CLIENT_SECRET" name="SPOTIFY_CLIENT_SECRET"
-                placeholder="e.g. 2ec510f6...">
-              <button type="button" class="toggle-pwd" id="toggleSecretBtn">Show</button>
+            <div class="form-group">
+              <label for="SPOTIFY_CLIENT_SECRET">
+                SPOTIFY_CLIENT_SECRET
+                <span class="desc">Spotify App Secret key</span>
+              </label>
+              <div class="input-wrapper">
+                <input type="password" id="SPOTIFY_CLIENT_SECRET" name="SPOTIFY_CLIENT_SECRET"
+                  placeholder="e.g. 2ec510f6...">
+                <button type="button" class="toggle-pwd" id="toggleSecretBtn">Show</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="SPOTIFY_REDIRECT_URI">
+                SPOTIFY_REDIRECT_URI
+                <span class="desc">OAuth callback URI</span>
+              </label>
+              <input type="text" id="SPOTIFY_REDIRECT_URI" name="SPOTIFY_REDIRECT_URI"
+                placeholder="http://127.0.0.1:3000/spotify/callback/">
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="SPOTIFY_REDIRECT_URI">
-              SPOTIFY_REDIRECT_URI
-              <span class="desc">OAuth callback URI</span>
-            </label>
-            <input type="text" id="SPOTIFY_REDIRECT_URI" name="SPOTIFY_REDIRECT_URI"
-              placeholder="http://127.0.0.1:3000/spotify/callback/">
-          </div>
-
           <!-- MODULE EXPANSIONS SECTION -->
-          <div class="form-group" style="margin-top: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+          <div class="form-group" style="margin-top: 1rem;" id="expansionsSection">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; flex-wrap: wrap; gap: 0.5rem;">
               <label style="font-size: 1.05rem; color: var(--ctp-peach); margin-bottom: 0;">
                 Module Expansions Configuration
                 <span class="desc">Custom variables stored under "expansion" key for folders in modules/</span>
               </label>
-              <button type="button" class="btn btn-secondary" id="addExpansionBtn">+ Add Expansion</button>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button type="button" class="btn btn-secondary" id="addExpansionBtn">+ Add Expansion</button>
+              </div>
+            </div>
+
+            <!-- MODULE SELECTOR MENUS -->
+            <div class="expansion-nav-wrapper">
+              <div class="expansion-menu-bar" id="expansionMenuBar">
+                <button type="button" class="expansion-menu-item active" data-module="all" id="expMenuAll">
+                  <span class="exp-icon">📦</span>
+                  <span>All Modules</span>
+                  <span class="exp-count-badge" id="moduleCountBadge">0</span>
+                </button>
+                <!-- Dynamic module menu items inserted here -->
+              </div>
             </div>
 
             <div id="expansionCardsContainer"></div>
           </div>
 
           <!-- CUSTOM SETTINGS SECTION -->
-          <div class="form-group" style="margin-top: 1rem;">
+          <div class="form-group" style="margin-top: 1rem;" id="customSettingsSection">
             <label>
               Custom Settings
               <span class="desc">Additional root keys stored in config.json</span>
@@ -110,7 +136,7 @@
             </div>
           </div>
 
-          <div class="actions">
+          <div class="actions" id="formActions">
             <button type="submit" class="btn btn-primary" id="saveBtn">Save Configuration</button>
           </div>
         </form>

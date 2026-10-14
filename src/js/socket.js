@@ -68,6 +68,9 @@ var controllerRenderer = (ip) => {
   if (typeof initCoreUpdater === "function") {
     initCoreUpdater();
   }
+  if (typeof loadSidebarExpansions === "function") {
+    loadSidebarExpansions();
+  }
 
   socketConnector(targetHost);
 };

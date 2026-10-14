@@ -189,6 +189,15 @@
   text-overflow: ellipsis;
 }
 
+.sidebar-nav-item .sidebar-badge {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background-color: var(--ctp-surface-2);
+  color: var(--ctp-subtext-0);
+  border: 1px solid var(--ctp-surface-1);
+}
+
 /* Individual Status Card */
 .status-tile {
   background-color: var(--ctp-surface-0);

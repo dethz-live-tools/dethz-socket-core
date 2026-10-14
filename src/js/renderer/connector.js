@@ -52,6 +52,8 @@ var connectRenderer = () => {
       <div class="connector-links" style="margin-top: 0.75rem; display: flex; gap: 0.75rem; justify-content: center; align-items: center;">
         <a href="/config" style="color: var(--ctp-mauve); font-size: 12px; text-decoration: none; font-weight: 600;">⚙️ Configuration</a>
         <span style="color: var(--ctp-surface-2); font-size: 11px;">•</span>
+        <a href="/config?view=expansions" style="color: var(--ctp-peach); font-size: 12px; text-decoration: none; font-weight: 600;">🧩 Expansions</a>
+        <span style="color: var(--ctp-surface-2); font-size: 11px;">•</span>
         <a href="/static" style="color: var(--ctp-sapphire); font-size: 12px; text-decoration: none; font-weight: 600;">🎨 Overlays</a>
       </div>
     </div>
