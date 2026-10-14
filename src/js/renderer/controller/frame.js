@@ -20,7 +20,7 @@ var renderSidebar = (activePage = "controller", activeModule = null, activeView 
         </div>
       </div>
       <div class="brand-meta">
-        <span class="brand-version" id="core-version">v1.0.1</span>
+        <span class="brand-version" id="core-version">v1.0.2</span>
         <button type="button" class="brand-update-badge hidden" id="brand-update-badge" title="New core version available">NEW</button>
       </div>
     </div>

@@ -47,7 +47,7 @@ var checkCoreUpdate = async (silent = true) => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
-    coreUpdateState.currentVersion = data.currentVersion || "v1.0.1";
+    coreUpdateState.currentVersion = data.currentVersion || "v1.0.2";
     coreUpdateState.latestVersion = data.latestVersion;
     coreUpdateState.hasUpdate = Boolean(data.hasUpdate);
     coreUpdateState.releaseNotes = data.releaseNotes;
